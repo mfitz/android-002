@@ -268,7 +268,7 @@ int id action_context_bar 0x7f05002e
 int id action_menu_divider 0x7f050027
 int id action_menu_presenter 0x7f050028
 int id action_mode_close_button 0x7f050035
-int id action_settings 0x7f050055
+int id action_settings 0x7f050056
 int id activity_chooser_view_content 0x7f050036
 int id alignBounds 0x7f050002
 int id alignMargins 0x7f050003
@@ -320,6 +320,7 @@ int id search_mag_icon 0x7f050046
 int id search_plate 0x7f050047
 int id search_src_text 0x7f050048
 int id search_voice_btn 0x7f05004c
+int id seekBar1 0x7f050055
 int id shortcut 0x7f05003f
 int id showCustom 0x7f050019
 int id showHome 0x7f050016
@@ -376,9 +377,9 @@ int string abc_searchview_description_submit 0x7f0a0007
 int string abc_searchview_description_voice 0x7f0a0008
 int string abc_shareactionprovider_share_with 0x7f0a000c
 int string abc_shareactionprovider_share_with_application 0x7f0a000b
-int string action_settings 0x7f0a000f
+int string action_settings 0x7f0a000e
 int string app_name 0x7f0a000d
-int string hello_world 0x7f0a000e
+int string more_info 0x7f0a000f
 int style AppBaseTheme 0x7f0b008b
 int style AppTheme 0x7f0b008c
 int style TextAppearance_AppCompat_Base_CompactMenu_Dialog 0x7f0b0063
