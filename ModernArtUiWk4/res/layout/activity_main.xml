@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:layout_margin="2dp"
+    android:background="@color/padding"
+    tools:context="com.michaelfitzmaurice.android.modernart.MainActivity" >
+    
+    <LinearLayout
+        android:id="@+id/LinearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="11"
+        android:background="@color/padding"
+        android:orientation="vertical" >
+        
+        <LinearLayout
+            android:id="@+id/LinearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/padding"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/padding"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/LinearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="7"
+        android:background="@color/padding"
+        android:orientation="vertical" >
+        
+        <LinearLayout
+            android:id="@+id/LinearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:orientation="vertical"
+            android:layout_weight="1">
+            
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/padding"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/LinearLayout8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@color/padding"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
