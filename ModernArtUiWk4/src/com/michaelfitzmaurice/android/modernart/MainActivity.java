@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -118,7 +117,6 @@ public class MainActivity extends Activity {
 			.setPositiveButton(R.string.more_info_learn_more, 
 							new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog,int id) {
-					Log.d(TAG, "Opening link to MOMA...");
 					openMoreInfoLink();
 				}
 			})
@@ -133,13 +131,10 @@ public class MainActivity extends Activity {
 	
 	private void openMoreInfoLink() {
 		
-//		WebView webView = new WebView(this);
-////		webView.getSettings().setJavaScriptEnabled(true);
-////	       webView.getSettings().setPluginState(PluginState.ON); 
-//		setContentView(webView);
-//	       webView.loadUrl("http://www.moma.org/m?native=false");
 		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData( Uri.parse( getString(R.string.more_info_url) ) );
+		Uri uri = Uri.parse( getString(R.string.more_info_url) );
+		Log.d(TAG, "Opening link to " + uri + " ...");
+		intent.setData(uri);
 		startActivity(intent);
 	}
 }
