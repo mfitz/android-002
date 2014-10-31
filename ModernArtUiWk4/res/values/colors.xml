@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="padding">#FF000000</color>
+    <color name="menu_bar">#FF000099</color>
 </resources>

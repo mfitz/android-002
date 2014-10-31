@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -81,7 +86,8 @@ public class MainActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_more_info) {
+			showMoreInfoDialog();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -100,5 +106,40 @@ public class MainActivity extends Activity {
 			int newColour = Color.rgb(red, greenValue, blue);
 			view.setBackgroundColor(newColour);
 		}
+	}
+	
+	private void showMoreInfoDialog() {
+		
+		AlertDialog.Builder alertDialogBuilder = 
+			new AlertDialog.Builder(this);
+		alertDialogBuilder
+			.setMessage(R.string.more_info_text)
+			.setCancelable(false)
+			.setPositiveButton(R.string.more_info_learn_more, 
+							new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					Log.d(TAG, "Opening link to MOMA...");
+					openMoreInfoLink();
+				}
+			})
+			.setNegativeButton(R.string.more_info_cancel,
+							new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					dialog.cancel();
+				}
+			});
+		alertDialogBuilder.create().show();
+	}
+	
+	private void openMoreInfoLink() {
+		
+//		WebView webView = new WebView(this);
+////		webView.getSettings().setJavaScriptEnabled(true);
+////	       webView.getSettings().setPluginState(PluginState.ON); 
+//		setContentView(webView);
+//	       webView.loadUrl("http://www.moma.org/m?native=false");
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData( Uri.parse( getString(R.string.more_info_url) ) );
+		startActivity(intent);
 	}
 }
