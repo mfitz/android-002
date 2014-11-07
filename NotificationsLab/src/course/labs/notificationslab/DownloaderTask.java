@@ -154,16 +154,18 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 
 						// TODO: Check whether the result code is not MainActivity.IS_ALIVE
 
-						if (false || true) {
+//						if (false || true) {
+						if ( getResultCode() != MainActivity.IS_ALIVE) {
+							Log.i(TAG, "MainActivity not alive - sending notification...");
 
 							// TODO: If so, create a PendingIntent using the
 							// restartMainActivityIntent and set its flags
 							// to FLAG_UPDATE_CURRENT
-
-
-
-							
-							
+							PendingIntent pendingIntent = 
+								PendingIntent.getActivity(context, 
+														MY_NOTIFICATION_ID, 
+														restartMainActivtyIntent, 
+														PendingIntent.FLAG_UPDATE_CURRENT);
 
 							// Uses R.layout.custom_notification for the
 							// layout of the notification View. The xml
@@ -176,10 +178,8 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 							// TODO: Set the notification View's text to
 							// reflect whether the download completed
 							// successfully
-
-
-
-							
+							String msg = success ? successMsg : failMsg;
+							mContentView.setTextViewText(R.id.text, msg);
 
 							// TODO: Use the Notification.Builder class to
 							// create the Notification. You will have to set
@@ -187,20 +187,25 @@ public class DownloaderTask extends AsyncTask<String, Void, String[]> {
 							// android.R.drawable.stat_sys_warning
 							// for the small icon. You should also
 							// setAutoCancel(true).
-
-
-
-							
-							
+							Notification notification 
+								= new Notification.Builder(mApplicationContext)
+							         .setContentTitle("Tweet download finished")
+							         .setContentText(msg)
+							         .setSmallIcon(android.R.drawable.stat_sys_warning)
+							         .setAutoCancel(true)
+							         .setContentIntent(pendingIntent)
+							         .build();
 							
 							
 							// TODO: Send the notification
-
-
-							
-							
+							NotificationManager notificationManager =
+								(NotificationManager) mApplicationContext.getSystemService(
+								    		Context.NOTIFICATION_SERVICE);
+							notificationManager.notify(MY_NOTIFICATION_ID, notification);
 
 							Log.i(TAG, "Notification Area Notification sent");
+						} else {
+							Log.i(TAG, "MainActivity is alive - no need to notify...");
 						}
 					}
 				}, null, 0, null, null);
