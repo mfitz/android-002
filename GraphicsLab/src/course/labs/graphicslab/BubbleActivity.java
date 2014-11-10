@@ -74,7 +74,8 @@ public class BubbleActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		Log.d(TAG, "In onResume()...");
+		
 		// Manage bubble popping sound
 		// Use AudioManager.STREAM_MUSIC as stream type
 
@@ -85,20 +86,22 @@ public class BubbleActivity extends Activity {
 				/ mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
 		// TODO - make a new SoundPool, allowing up to 10 streams
-		mSoundPool = null;
+		mSoundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 
 		// TODO - set a SoundPool OnLoadCompletedListener that calls
 		// setupGestureDetector()
-		
-		
-		
-		
+		mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
+
+			@Override
+			public void onLoadComplete(SoundPool soundPool, int sampleId,
+					int status) {
+				Log.d(TAG, "SoundPool has finished loading sound " + sampleId);
+				setupGestureDetector();
+			}
+		});
 		
 		// TODO - load the sound from res/raw/bubble_pop.wav
-		
-		
-		
-
+		mSoundID = mSoundPool.load(this, R.raw.bubble_pop, 1);
 	}
 
 	@Override
@@ -115,6 +118,8 @@ public class BubbleActivity extends Activity {
 
 	// Set up GestureDetector
 	private void setupGestureDetector() {
+		
+		Log.d(TAG, "In setupGestureDetector()...");
 
 		mGestureDetector = new GestureDetector(this,
 		new GestureDetector.SimpleOnGestureListener() {
@@ -129,7 +134,8 @@ public class BubbleActivity extends Activity {
 				// TODO - Implement onFling actions.
 				// You can get all Views in mFrame one at a time
 				// using the ViewGroup.getChildAt() method
-
+				Log.d(TAG, "onFling() with MotionEvents " + event1 + ", " + event2 
+						+ ", xVelocity:" + velocityX + ", yVelocity:" + velocityY);
 
 				
 				
@@ -150,10 +156,12 @@ public class BubbleActivity extends Activity {
 				// TODO - Implement onSingleTapConfirmed actions.
 				// You can get all Views in mFrame using the
 				// ViewGroup.getChildCount() method
+				Log.d(TAG, "onSingleTapConfirmed() with MotionEvent " + event);
 
-
+				BubbleView bubbleView = 
+					new BubbleView(BubbleActivity.this, event.getX(), event.getY() );
 				
-				
+				mFrame.addView(bubbleView);
 				
 				
 				
@@ -172,15 +180,12 @@ public class BubbleActivity extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 
+		Log.d(TAG, "In onTouchEvent() with MotionEvent " + event);
+		
 		// TODO - Delegate the touch to the gestureDetector
-
+		return mGestureDetector.onTouchEvent(event);
 		
-
-		
-		
-		
-		
-		return true || false;
+//		return true || false;
 		
 	}
 
@@ -188,6 +193,7 @@ public class BubbleActivity extends Activity {
 	protected void onPause() {
 
 		// TODO - Release all SoundPool resources
+		Log.d(TAG, "In onPause()...");
 
 
 
@@ -216,6 +222,8 @@ public class BubbleActivity extends Activity {
 
 		BubbleView(Context context, float x, float y) {
 			super(context);
+			
+			Log.d(TAG, "In BubbleView constructor...");
 
 			// Create a new random number generator to
 			// randomize size, rotation, speed and direction
@@ -246,7 +254,7 @@ public class BubbleActivity extends Activity {
 			if (speedMode == RANDOM) {
 
 				// TODO - set rotation in range [1..3]
-
+				mDRotate = r.nextInt(3) + 1;
 				
 			} else {
 				mDRotate = 0;
@@ -259,20 +267,20 @@ public class BubbleActivity extends Activity {
 			switch (speedMode) {
 
 			case SINGLE:
-
+				Log.d(TAG, "Speed Mode = SINGLE");
 				mDx = 20;
 				mDy = 20;
 				break;
 
 			case STILL:
-
+				Log.d(TAG, "Speed Mode = STILL");
 				// No speed
 				mDx = 0;
 				mDy = 0;
 				break;
 
 			default:
-
+				Log.d(TAG, "Speed Mode = DEFAULT");
 				// TODO - Set mDx and mDy to indicate movement direction and speed 
 				// Limit speed in the x and y direction to [-3..3] pixels per movement.
 
@@ -288,20 +296,30 @@ public class BubbleActivity extends Activity {
 		}
 
 		private void createScaledBitmap(Random r) {
+			
+			Log.d(TAG, "In createScaledBitmap(), BITMAP_SIZE = " + BITMAP_SIZE 
+					+ ", speed mode = " +speedMode);
 
 			if (speedMode != RANDOM) {
 				mScaledBitmapWidth = BITMAP_SIZE * 3;
 			} else {
 
 				// TODO - set scaled bitmap size in range [1..3] * BITMAP_SIZE
-
-
-				
+				mScaledBitmapWidth = BITMAP_SIZE * (r.nextInt(3) + 1);
 			}
+			
+			Log.d(TAG, "mScaledBitmapWidth = " + mScaledBitmapWidth);
 
 			// TODO - create the scaled bitmap using size set above
-
-
+			BitmapFactory.Options options = new BitmapFactory.Options();
+//			options.inSampleSize = mScaledBitmapWidth;
+			options.inSampleSize = 1;
+			mScaledBitmap = 
+				BitmapFactory.decodeResource(getResources(), R.drawable.b128);
+			mScaledBitmap = 
+				Bitmap.createScaledBitmap(mScaledBitmap, 
+												mScaledBitmapWidth, 
+												mScaledBitmapWidth, false);
 		}
 
 		// Start moving the BubbleView & updating the display
@@ -389,29 +407,28 @@ public class BubbleActivity extends Activity {
 		// Draw the Bubble at its current location
 		@Override
 		protected synchronized void onDraw(Canvas canvas) {
+			
+			Log.d(TAG, "onDraw() called with canvas " + canvas);
 
 			// TODO - save the canvas
-
+			canvas.save();
 
 			
 			// TODO - increase the rotation of the original image by mDRotate
-
+			mRotate = mRotate + mDRotate;
 
 			
 			// TODO Rotate the canvas by current rotation
 			// Hint - Rotate around the bubble's center, not its position
-
-
+			canvas.rotate(mRotate, mXPos, mYPos);
 
 			
 			// TODO - draw the bitmap at it's new location
-
+			canvas.drawBitmap(mScaledBitmap, mXPos, mYPos, mPainter);
 
 			
 			// TODO - restore the canvas
-
-
-			
+			canvas.restore();
 		}
 
 		// Returns true if the BubbleView is still on the screen after the move
