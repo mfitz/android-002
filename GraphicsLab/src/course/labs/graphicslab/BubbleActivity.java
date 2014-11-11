@@ -163,29 +163,20 @@ public class BubbleActivity extends Activity {
 						Log.d(TAG, "Removing bubble (" + bubble.mXPos + "," 
 								+ bubble.mYPos + ") for MotionEvent at coordinates " 
 								+ event.getX() + "," + event.getY() );
-						mFrame.removeView(bubble);
+						bubble.stopMovement(true);
 						popped = true;
-						mSoundPool.play(mSoundID, 
-									mStreamVolume, 
-									mStreamVolume, 
-									0, 
-									0, 
-									1);
 						break;
 					}
 				}
 				
 				if (popped == false) {
-					BubbleView bubbleView = 
+					Log.d(TAG, "Creating new bubble  at coordinates " 
+							+ event.getX() + "," + event.getY() );
+					BubbleView bubble = 
 						new BubbleView(BubbleActivity.this, event.getX(), event.getY() );
-					mFrame.addView(bubbleView);
+					mFrame.addView(bubble);
+					bubble.startMovement();
 				}
-				
-				
-				
-				
-				
-				
 				
 				
 				
@@ -202,8 +193,6 @@ public class BubbleActivity extends Activity {
 		
 		// TODO - Delegate the touch to the gestureDetector
 		return mGestureDetector.onTouchEvent(event);
-		
-//		return true || false;
 	}
 
 	@Override
@@ -211,11 +200,8 @@ public class BubbleActivity extends Activity {
 
 		// TODO - Release all SoundPool resources
 		Log.d(TAG, "In onPause()...");
-
-
-
-		
-		
+		mSoundPool.release();
+		mSoundPool = null;
 		
 		super.onPause();
 	}
@@ -264,15 +250,12 @@ public class BubbleActivity extends Activity {
 			setRotation(r);
 
 			mPainter.setAntiAlias(true);
-
 		}
 
 		private void setRotation(Random r) {
 			if (speedMode == RANDOM) {
-
 				// TODO - set rotation in range [1..3]
 				mDRotate = r.nextInt(3) + 1;
-				
 			} else {
 				mDRotate = 0;
 			}
@@ -300,15 +283,10 @@ public class BubbleActivity extends Activity {
 				Log.d(TAG, "Speed Mode = DEFAULT");
 				// TODO - Set mDx and mDy to indicate movement direction and speed 
 				// Limit speed in the x and y direction to [-3..3] pixels per movement.
-
-
-				
-				
-				
-				
-				
-				
-				
+				mDx = r.nextInt(6) + 1;
+				mDx -= 3;
+				mDy = r.nextInt(6) + 1;
+				mDy -= 3;
 			}
 		}
 
@@ -353,12 +331,18 @@ public class BubbleActivity extends Activity {
 					// move one step. If the BubbleView exits the display,
 					// stop the BubbleView's Worker Thread.
 					// Otherwise, request that the BubbleView be redrawn.
-
-
-					
-					
-					
-					
+					if ( moveWhileOnScreen() ) {
+						mFrame.post(new Runnable() {
+							@Override
+							public void run() {
+								BubbleView.this.invalidate();
+							}
+						});
+					} else {
+						Log.d(TAG, "Stopping bubble " + BubbleView.this 
+								+ " - it's off screen");
+						stopMovement(false);
+					}
 				}
 			}, 0, REFRESH_RATE, TimeUnit.MILLISECONDS);
 		}
@@ -372,7 +356,6 @@ public class BubbleActivity extends Activity {
             	(y >= mYPos) && (y <= (mYPos + mScaledBitmapWidth));
 
             return (insideX && insideY);
-//			return  true || false;
 		}
 
 		// Cancel the Bubble's movement
@@ -380,6 +363,8 @@ public class BubbleActivity extends Activity {
 		// Play pop sound if the BubbleView was popped
 
 		private void stopMovement(final boolean wasPopped) {
+			
+			Log.d(TAG, "Stopping bubble " + BubbleView.this);
 
 			if (null != mMoverFuture) {
 
@@ -393,16 +378,17 @@ public class BubbleActivity extends Activity {
 					public void run() {
 
 						// TODO - Remove the BubbleView from mFrame
-
-
+						mFrame.removeView(BubbleView.this);
 						
 						// TODO - If the bubble was popped by user,
 						// play the popping sound
 						if (wasPopped) {
-
-
-
-							
+							mSoundPool.play(mSoundID, 
+									mStreamVolume, 
+									mStreamVolume, 
+									0, 
+									0, 
+									1);
 						}
 					}
 				});
@@ -419,24 +405,18 @@ public class BubbleActivity extends Activity {
 		@Override
 		protected synchronized void onDraw(Canvas canvas) {
 			
-			Log.d(TAG, "onDraw() called with canvas " + canvas);
-
 			// TODO - save the canvas
 			canvas.save();
-
 			
 			// TODO - increase the rotation of the original image by mDRotate
 			mRotate = mRotate + mDRotate;
-
 			
 			// TODO Rotate the canvas by current rotation
 			// Hint - Rotate around the bubble's center, not its position
-			canvas.rotate(mRotate, mXPos, mYPos);
-
+			canvas.rotate(mRotate, mXPos + mRadius, mYPos + mRadius);
 			
 			// TODO - draw the bitmap at it's new location
 			canvas.drawBitmap(mScaledBitmap, mXPos, mYPos, mPainter);
-
 			
 			// TODO - restore the canvas
 			canvas.restore();
@@ -447,25 +427,26 @@ public class BubbleActivity extends Activity {
 		private synchronized boolean moveWhileOnScreen() {
 
 			// TODO - Move the BubbleView
-
-
-
-			
+			mXPos = mXPos + mDx;
+			mYPos = mYPos + mDy;
 			
 			return isOutOfView();
-
 		}
 
 		// Return true if the BubbleView is still on the screen after the move
 		// operation
 		private boolean isOutOfView() {
+			
+			// name suggests the opposite functionality?
 
 			// TODO - Return true if the BubbleView is still on the screen after
 			// the move operation
-
-			
-			return true || false;
-
+			if ( (mXPos + mScaledBitmapWidth) <= mDisplayWidth  
+					&& (mYPos + mScaledBitmapWidth) <= mDisplayHeight) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
