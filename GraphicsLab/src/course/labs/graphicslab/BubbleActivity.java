@@ -133,11 +133,17 @@ public class BubbleActivity extends Activity {
 				// using the ViewGroup.getChildAt() method
 				Log.d(TAG, "onFling() with MotionEvents " + event1 + ", " + event2 
 						+ ", xVelocity:" + velocityX + ", yVelocity:" + velocityY);
-
-				
-				
-				
-				
+				int numberOfBubbles = mFrame.getChildCount();
+				for (int i = 0; i < numberOfBubbles; i++) {
+					BubbleView bubble = (BubbleView) mFrame.getChildAt(i);
+					if ( bubble.intersects( event1.getX(), event1.getY() ) ) {
+						Log.d(TAG, "Flinging bubble (" + bubble.mXPos + "," 
+								+ bubble.mYPos + ") for MotionEvent at coordinates " 
+								+ event2.getX() + "," + event2.getY() );
+						bubble.deflect(velocityX, velocityY);
+						break;
+					}
+				}
 				
 				return true;
 			}
@@ -177,9 +183,6 @@ public class BubbleActivity extends Activity {
 					mFrame.addView(bubble);
 					bubble.startMovement();
 				}
-				
-				
-				
 				
 				return true;
 			}
