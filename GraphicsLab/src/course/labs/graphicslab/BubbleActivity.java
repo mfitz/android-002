@@ -68,7 +68,6 @@ public class BubbleActivity extends Activity {
 
 		// Load basic bubble Bitmap
 		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.b64);
-
 	}
 
 	@Override
@@ -108,11 +107,9 @@ public class BubbleActivity extends Activity {
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		if (hasFocus) {
-
 			// Get the size of the display so this View knows where borders are
 			mDisplayWidth = mFrame.getWidth();
 			mDisplayHeight = mFrame.getHeight();
-
 		}
 	}
 
@@ -158,10 +155,31 @@ public class BubbleActivity extends Activity {
 				// ViewGroup.getChildCount() method
 				Log.d(TAG, "onSingleTapConfirmed() with MotionEvent " + event);
 
-				BubbleView bubbleView = 
-					new BubbleView(BubbleActivity.this, event.getX(), event.getY() );
+				boolean popped = false;
+				int numberOfBubbles = mFrame.getChildCount();
+				for (int i = 0; i < numberOfBubbles; i++) {
+					BubbleView bubble = (BubbleView) mFrame.getChildAt(i);
+					if ( bubble.intersects( event.getX(), event.getY() ) ) {
+						Log.d(TAG, "Removing bubble (" + bubble.mXPos + "," 
+								+ bubble.mYPos + ") for MotionEvent at coordinates " 
+								+ event.getX() + "," + event.getY() );
+						mFrame.removeView(bubble);
+						popped = true;
+						mSoundPool.play(mSoundID, 
+									mStreamVolume, 
+									mStreamVolume, 
+									0, 
+									0, 
+									1);
+						break;
+					}
+				}
 				
-				mFrame.addView(bubbleView);
+				if (popped == false) {
+					BubbleView bubbleView = 
+						new BubbleView(BubbleActivity.this, event.getX(), event.getY() );
+					mFrame.addView(bubbleView);
+				}
 				
 				
 				
@@ -186,7 +204,6 @@ public class BubbleActivity extends Activity {
 		return mGestureDetector.onTouchEvent(event);
 		
 //		return true || false;
-		
 	}
 
 	@Override
@@ -303,7 +320,6 @@ public class BubbleActivity extends Activity {
 			if (speedMode != RANDOM) {
 				mScaledBitmapWidth = BITMAP_SIZE * 3;
 			} else {
-
 				// TODO - set scaled bitmap size in range [1..3] * BITMAP_SIZE
 				mScaledBitmapWidth = BITMAP_SIZE * (r.nextInt(3) + 1);
 			}
@@ -311,15 +327,11 @@ public class BubbleActivity extends Activity {
 			Log.d(TAG, "mScaledBitmapWidth = " + mScaledBitmapWidth);
 
 			// TODO - create the scaled bitmap using size set above
-			BitmapFactory.Options options = new BitmapFactory.Options();
-//			options.inSampleSize = mScaledBitmapWidth;
-			options.inSampleSize = 1;
 			mScaledBitmap = 
-				BitmapFactory.decodeResource(getResources(), R.drawable.b128);
-			mScaledBitmap = 
-				Bitmap.createScaledBitmap(mScaledBitmap, 
-												mScaledBitmapWidth, 
-												mScaledBitmapWidth, false);
+				Bitmap.createScaledBitmap(mBitmap, 
+											mScaledBitmapWidth, 
+											mScaledBitmapWidth, 
+											false);
 		}
 
 		// Start moving the BubbleView & updating the display
@@ -354,14 +366,13 @@ public class BubbleActivity extends Activity {
 		// Returns true if the BubbleView intersects position (x,y)
 		private synchronized boolean intersects(float x, float y) {
 
-			// TODO - Return true if the BubbleView intersects position (x,y)
+            boolean insideX = 
+            	(x >= mXPos) && (x <= (mXPos + mScaledBitmapWidth));
+            boolean insideY = 
+            	(y >= mYPos) && (y <= (mYPos + mScaledBitmapWidth));
 
-
-
-			
-			
-			return  true || false;
-
+            return (insideX && insideY);
+//			return  true || false;
 		}
 
 		// Cancel the Bubble's movement
