@@ -1,9 +1,6 @@
 package course.labs.locationlab;
 
 import static android.location.LocationManager.NETWORK_PROVIDER;
-
-import java.util.List;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.location.Location;
@@ -163,7 +160,6 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 				.show();
 			return;
 		}
-		
 
 		// A PlaceBadge for this location already exists. In this case issue a Toast message
 		// with the text - "You already have this location badge." Use the PlaceRecord 
@@ -179,7 +175,6 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 					.show();
 			}
 		}
-			
 		
 		// The place has no country name. In this case issue a Toast message
 		// with the text - "There is no country at this location". 
@@ -195,28 +190,9 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 			return;
 		}
 		
-		
-		
 		// Otherwise - add the PlaceBadge to the adapter
-		
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		Log.d(TAG, "Adding new place: " + place);
+		mAdapter.add(place);
 	}
 
 	// LocationListener methods
