@@ -21,7 +21,8 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 	private static final String TAG = "Lab-Location";
 
 	// Set to false if you don't have network access
-	public static boolean sHasNetwork = false;
+//	public static boolean sHasNetwork = false;
+	public static boolean sHasNetwork = true;
 
 	private Location mLastLocationReading;
 	private PlaceViewAdapter mAdapter;
