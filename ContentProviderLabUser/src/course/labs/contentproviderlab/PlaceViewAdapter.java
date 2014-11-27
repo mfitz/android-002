@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.util.Log;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -25,6 +27,8 @@ import android.widget.TextView;
 import course.labs.contentproviderlab.provider.PlaceBadgesContract;
 
 public class PlaceViewAdapter extends CursorAdapter {
+	
+	private static String TAG = "Lab-ContentProvider";
 
 	private static final String APP_DIR = "ContentProviderLab/Badges";
 	private ArrayList<PlaceRecord> mPlaceRecords = new ArrayList<PlaceRecord>();
@@ -56,24 +60,21 @@ public class PlaceViewAdapter extends CursorAdapter {
 
 	@Override
 	public Cursor swapCursor(Cursor newCursor) {
+		
+		Log.d(TAG, "Entered swapCursor() with newCursor = " + newCursor);
 
 		// TODO - clear the ArrayList list so it contains
 		// the current set of PlaceRecords. Use the
 		// getPlaceRecordFromCursor() method as you add the
 		// cursor's places to the list
+		mPlaceRecords.clear();
+		if (newCursor != null) {
+			while ( newCursor.moveToNext() ) {
+				mPlaceRecords.add( getPlaceRecordFromCursor(newCursor) );
+			}
+		}
 
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
+        return super.swapCursor(newCursor);
 	}
 
 	// Returns a new PlaceRecord for the data at the cursor's
@@ -128,6 +129,8 @@ public class PlaceViewAdapter extends CursorAdapter {
 	}
 
 	public void add(PlaceRecord listItem) {
+		
+		Log.d(TAG, "Adding new PlaceRecord " + listItem);
 
 		String lastPathSegment = Uri.parse(listItem.getFlagUrl())
 				.getLastPathSegment();
@@ -137,21 +140,21 @@ public class PlaceViewAdapter extends CursorAdapter {
 
 			listItem.setFlagBitmapPath(filePath);
 			mPlaceRecords.add(listItem);
-
-			ContentValues values = new ContentValues();
-
+			
 			// TODO - Insert new record into the ContentProvider
-
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
+			ContentResolver contentResolver = mContext.getContentResolver();
+			ContentValues values = new ContentValues();
+			values.put(PlaceBadgesContract.COUNTRY_NAME, 
+						listItem.getCountryName() );
+			values.put( PlaceBadgesContract.PLACE_NAME, listItem.getPlace() );
+			values.put(PlaceBadgesContract.FLAG_BITMAP_PATH, filePath );
+			values.put(PlaceBadgesContract.LAT, 
+						listItem.getLocation().getLatitude() );
+			values.put(PlaceBadgesContract.LON, 
+						listItem.getLocation().getLongitude() );
+			Uri newRowUri = 
+				contentResolver.insert(PlaceBadgesContract.CONTENT_URI, values);
+			Log.d(TAG, "Created new content provider record at " + newRowUri);
         }
 
 	}
@@ -161,12 +164,16 @@ public class PlaceViewAdapter extends CursorAdapter {
 	}
 
 	public void removeAllViews() {
+		
+		Log.d(TAG, "Entered removeAllViews()...");
+		
 		mPlaceRecords.clear();
 
 		// TODO - delete all records in the ContentProvider
-
-        
-        
+		ContentResolver contentResolver = mContext.getContentResolver();
+		int rowsDeleted = 
+			contentResolver.delete(PlaceBadgesContract.CONTENT_URI, null, null);
+		Log.d(TAG, "Deleted " + rowsDeleted + " rows");
 	}
 
 	@Override

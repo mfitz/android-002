@@ -1,5 +1,6 @@
 package course.labs.contentproviderlab;
 
+import static android.location.LocationManager.NETWORK_PROVIDER;
 import android.app.ListActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
@@ -67,14 +68,9 @@ public class PlaceViewActivity extends ListActivity implements
 
 		// TODO - add a footerView to the ListView
 		// You can use footer_view.xml to define the footer
+		View footerView = 
+			getLayoutInflater().inflate(R.layout.footer_view, null);
 		
-		View footerView = null;
-		
-		// Can be removed after implementing the TODO above
-		if (null == footerView ) {
-			return;
-		}
-
 		// TODO - footerView must respond to user clicks, handling 3 cases:
 
 		// There is no current location - response is up to you. The best
@@ -95,109 +91,132 @@ public class PlaceViewActivity extends ListActivity implements
 			@Override
 			public void onClick(View view) {
 
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+				if (mLastLocationReading == null) {
+					CharSequence text = 
+						"We have not yet determined your current location." 
+								+ " Try again later.";
+					Toast.makeText(getApplicationContext(), 
+									text, 
+									Toast.LENGTH_SHORT)
+						.show();
+				} else {
+					if ( mCursorAdapter.intersects(mLastLocationReading) ) {
+						CharSequence text = 
+							"You already have this location badge.";
+							Toast.makeText(getApplicationContext(), 
+											text, 
+											Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Log.d(TAG, "Downloading place record for location " 
+								+ mLastLocationReading + " as a background task...");
+						PlaceDownloaderTask downloaderTask = 
+							new PlaceDownloaderTask(PlaceViewActivity.this, 
+													sHasNetwork);
+						downloaderTask.execute(mLastLocationReading);
+					}
+				}
 			}
-
 		});
-
 		getListView().addFooterView(footerView);
-
+		Log.d(TAG, "Added footer view " + footerView + " to listView");
+		
 		// TODO - Create and set empty PlaceViewAdapter
-		mCursorAdapter = null;
+		mCursorAdapter = new PlaceViewAdapter(this,  null, 0);
+		setListAdapter(mCursorAdapter);
 
 		// TODO - Initialize the loader
-		
-		
+		getLoaderManager().initLoader(0, null, this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		Log.d(TAG, "Entered onResume()...");
 
 		startMockLocationManager();
 
 		// TODO - Check NETWORK_PROVIDER for an existing location reading.
 		// Only keep this last reading if it is fresh - less than 5 minutes old
-
-		
-		
-		
-		
-		
+		mLastLocationReading = 
+				mLocationManager.getLastKnownLocation(NETWORK_PROVIDER);
+		if (mLastLocationReading != null) {
+			long locationAgeMs = ageInMilliseconds(mLastLocationReading);
+			if (locationAgeMs > FIVE_MINS) {
+				Log.d(TAG, "Discarding old last location " + mLastLocationReading 
+						+ "; it is " + locationAgeMs + " ms old");
+				mLastLocationReading = null;
+			}
+		}
 		
 		// TODO - register to receive location updates from NETWORK_PROVIDER
-
-
-		
-		
+		mLocationManager.requestLocationUpdates(NETWORK_PROVIDER, 
+												mMinTime, 
+												mMinDistance, 
+												this);
 	}
 
 	@Override
 	protected void onPause() {
 
 		// TODO - unregister for location updates
-
-		
+		mLocationManager.removeUpdates(this);
 		
 		shutdownMockLocationManager();
 		super.onPause();
-
 	}
 
 	public void addNewPlace(PlaceRecord place) {
+		
+		Log.d(TAG, "Entered addNewPlace with place " + place);
 
 		// TODO - Attempt to add place to the adapter, considering the following cases
+		
+		// The place is null - issue a Toast message with the text
+		// "PlaceBadge could not be acquired"
+		// Do not add the PlaceBadge to the adapter
+		if (place == null) {
+			CharSequence text = "PlaceBadge could not be acquired";
+			Toast.makeText(getApplicationContext(), 
+					text, 
+					Toast.LENGTH_SHORT)
+					.show();
+			return;
+		}
 
 		// A PlaceBadge for this location already exists - issue a Toast message
 		// with the text - "You already have this location badge." Use the PlaceRecord 
 		// class' intersects() method to determine whether a PlaceBadge already exists
 		// for a given location. Do not add the PlaceBadge to the adapter
-		
-		// The place is null - issue a Toast message with the text
-		// "PlaceBadge could not be acquired"
-		// Do not add the PlaceBadge to the adapter
+		for ( PlaceRecord placeRecord : mCursorAdapter.getList() ) {
+			if ( placeRecord.intersects( place.getLocation() ) ) {
+				CharSequence text = 
+					"You already have this location badge.";
+				Toast.makeText(getApplicationContext(), 
+								text, 
+								Toast.LENGTH_SHORT)
+					.show();
+			}
+		}
 		
 		// The place has no country name - issue a Toast message
 		// with the text - "There is no country at this location". 
 		// Do not add the PlaceBadge to the adapter
+		if (place.getCountryName() == null 
+				|| "".equals(place.getCountryName() )) {
+			Log.w(TAG, "Attempt to add a place with no country: " + place);
+			CharSequence text = "There is no country at this location";
+			Toast.makeText(getApplicationContext(), 
+							text, 
+							Toast.LENGTH_SHORT)
+				.show();
+			return;
+		}
 		
 		// Otherwise - add the PlaceBadge to the adapter
-
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		Log.d(TAG, "Adding new place: " + place);
+		mCursorAdapter.add(place);
 	}
 
 	// LocationListener methods
@@ -211,12 +230,10 @@ public class PlaceViewActivity extends ListActivity implements
 		// the current location
 		// 3) If the current location is newer than the last locations, keep the
 		// current location.
-
-
-		
-		
-		
-		
+		if (mLastLocationReading == null 
+				|| currentLocation.getTime() > mLastLocationReading.getTime() ) {
+			mLastLocationReading = currentLocation;
+		}
 	}
 
 	@Override
@@ -238,30 +255,55 @@ public class PlaceViewActivity extends ListActivity implements
 	// LoaderCallback methods
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		
+		Log.d(TAG, "Entered onCreateLoader()...");
 
+//		// String used to filter contacts with empty or missing names or are unstarred
+//		String select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
+//				+ Contacts.DISPLAY_NAME + " != '' ) AND (" + Contacts.STARRED
+//				+ "== 1))";
+//
+//		// String used for defining the sort order
+//		String sortOrder = Contacts._ID + " ASC";
+//
+//		return new CursorLoader(this, Contacts.CONTENT_URI, CONTACTS_ROWS,
+//				select, null, sortOrder);
+		String[] placesRows = 
+				new String[] { PlaceBadgesContract._ID,
+								PlaceBadgesContract.FLAG_BITMAP_PATH,
+								PlaceBadgesContract.COUNTRY_NAME,
+								PlaceBadgesContract.PLACE_NAME,
+								PlaceBadgesContract.LAT,
+								PlaceBadgesContract.LON};
+		String select = null; //TODO - check if this means select everything 
+		
+		String sortOrder = PlaceBadgesContract._ID + " ASC";
 		
 		// TODO - Create a new CursorLoader and return it
-		return null;
+		return new CursorLoader(this, 
+								PlaceBadgesContract.CONTENT_URI, 
+								placesRows, 
+								select, 
+								null, 
+								sortOrder);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> newLoader, Cursor newCursor) {
-
+		
+		Log.d(TAG, "Entered onLoadFinished() with cursor " + newCursor);
 		
 		// TODO - Swap in the newCursor
-
-	
-	
+		mCursorAdapter.swapCursor(newCursor);
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> newLoader) {
-
+		
+		Log.d(TAG, "Entered onLoaderReset() with loader " + newLoader);
 		
 		// TODO - swap in a null Cursor
-
-	
-	
+		mCursorAdapter.swapCursor(null);
 	}
 
 	// Returns age of location in milliseconds
@@ -271,6 +313,7 @@ public class PlaceViewActivity extends ListActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		Log.d(TAG, "Entered onCreateOptionsMenu() with menu " + menu);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		return true;
@@ -278,6 +321,8 @@ public class PlaceViewActivity extends ListActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		Log.d(TAG, "Entered onOptionsItemSelected() with menu item" + item);
 		switch (item.getItemId()) {
 		case R.id.delete_badges:
 			mCursorAdapter.removeAllViews();

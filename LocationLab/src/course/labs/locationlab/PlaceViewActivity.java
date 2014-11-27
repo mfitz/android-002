@@ -52,7 +52,6 @@ public class PlaceViewActivity extends ListActivity implements LocationListener 
 		// You can use footer_view.xml to define the footer
 		View footerView = getLayoutInflater().inflate(R.layout.footer_view, null);
 		placesListView.addFooterView(footerView);
-		placesListView.addFooterView(footerView);
 		
 		mAdapter = new PlaceViewAdapter(getApplicationContext());
 		setListAdapter(mAdapter);
