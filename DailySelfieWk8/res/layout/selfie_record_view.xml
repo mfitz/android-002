@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/selfie_thumbnail_description"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/creation_date"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:singleLine="true"
+        android:text="@string/selfie_date_description"
+        android:textSize="12sp" />
+
+</LinearLayout>
