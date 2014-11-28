@@ -91,19 +91,19 @@ public class SelfieListActivity extends ListActivity {
 	        File imageFile = new File( latestSelfieUri.getPath() );
 //	        File imageFile = new File()
 	        SelfieRecord newSelfie = 
-	        	new SelfieRecord(makeThumbnail(imageFile), imageFile);
+	        	new SelfieRecord(null, imageFile);
 	        listAdapter.add(newSelfie);
 	        Log.d(LOG_TAG, "Added new selfie for " + latestSelfieUri);
 	    }
 	}
 	
-	private Bitmap makeThumbnail(File imageFile) {
-		
-		return ThumbnailUtils.extractThumbnail(
-					BitmapFactory.decodeFile( imageFile.getPath() ), 
-					12, 
-					12);
-	}
+//	private Bitmap makeThumbnail(File imageFile) {
+//		
+//		return ThumbnailUtils.extractThumbnail(
+//					BitmapFactory.decodeFile( imageFile.getPath() ), 
+//					12, 
+//					12);
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

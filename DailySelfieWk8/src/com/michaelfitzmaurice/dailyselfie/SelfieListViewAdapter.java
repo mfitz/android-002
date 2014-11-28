@@ -1,10 +1,14 @@
 package com.michaelfitzmaurice.dailyselfie;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +64,8 @@ public class SelfieListViewAdapter extends BaseAdapter {
 			viewHolder = (ViewHolder) newView.getTag();
 		}
 		
-		viewHolder.thumbnail.setImageBitmap( selfie.getThumbnail() );
+		viewHolder.thumbnail.setImageBitmap( 
+			makeThumbnail(selfie.getFullImageFile(), viewHolder.thumbnail) );
 		String selfieDate = 
 			new Date( selfie.getFullImageFile().lastModified() ).toString();
 		viewHolder.creationDate.setText(selfieDate);
@@ -76,6 +81,14 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	public void remove(SelfieRecord listItem) {
 		selfieList.remove(listItem);
 		notifyDataSetChanged();
+	}
+	
+	private Bitmap makeThumbnail(File imageFile, View imageView) {
+		
+		return ThumbnailUtils.extractThumbnail(
+					BitmapFactory.decodeFile( imageFile.getPath() ), 
+					80, 
+					80 );
 	}
 	
 	static class ViewHolder {

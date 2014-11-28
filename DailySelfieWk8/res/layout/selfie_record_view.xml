@@ -15,6 +15,7 @@
         android:id="@+id/creation_date"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:gravity="center_vertical"
         android:singleLine="true"
         android:text="@string/selfie_date_description"
         android:textSize="12sp" />
