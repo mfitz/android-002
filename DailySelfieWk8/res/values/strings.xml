@@ -8,5 +8,6 @@
     <string name="selfie_date_description">Date the selfie was taken</string>
     <string name="title_activity_selfie_detail">SelfieDetailActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_preferences">Preferences</string>
 
 </resources>

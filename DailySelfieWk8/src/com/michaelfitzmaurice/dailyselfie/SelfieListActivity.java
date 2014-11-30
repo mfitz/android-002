@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ public class SelfieListActivity extends ListActivity {
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final SimpleDateFormat DATE_FORMATTER = 
 			new SimpleDateFormat("ddMMMyyyy_HHmmss");
+	private static final long TWO_MINUTES_IN_MS = 
+			1000 * 60 * 2;
 	
 	private SelfieListViewAdapter listAdapter;
 	private Uri latestSelfieUri;
@@ -47,6 +51,21 @@ public class SelfieListActivity extends ListActivity {
 		
 		listAdapter = new SelfieListViewAdapter( getApplicationContext() );
 		setListAdapter(listAdapter);
+		
+		// TODO set alarm for AlarmNotifier, every 2 minutes, from now
+		AlarmManager alarmManager = 
+			(AlarmManager) getSystemService(ALARM_SERVICE);
+		Intent receiverIntent = 
+			new Intent(SelfieListActivity.this, AlarmNotifier.class);
+		PendingIntent pendingIntent = 
+			PendingIntent.getBroadcast(SelfieListActivity.this, 
+										0, 
+										receiverIntent, 
+										0);
+		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+											0,
+											TWO_MINUTES_IN_MS,
+											pendingIntent);
 	}
 	
 	private void takeSelfie() {
