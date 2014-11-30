@@ -72,7 +72,7 @@ public class SelfieListActivity extends ListActivity {
 	private Uri createImageFile() throws IOException {
 		
 	    String timeStamp = DATE_FORMATTER.format( new Date() );
-	    String imageFileName = "selfie_" + timeStamp + "_";
+	    String imageFileName = timeStamp + "_";
 	    File imageFile = 
 	    		File.createTempFile(imageFileName, 
 	    							".jpg",

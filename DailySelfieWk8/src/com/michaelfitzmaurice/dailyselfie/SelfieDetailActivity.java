@@ -20,6 +20,7 @@ public class SelfieDetailActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.selfie_detail_view);
 		Intent intent = getIntent();
@@ -38,21 +39,27 @@ public class SelfieDetailActivity extends Activity {
 						+ viewWidth + ", " + viewHeight);
 		Bitmap image = getScaledBitMap(imageFile, viewWidth, viewHeight );
 		imageView.setImageBitmap(image);
+		setTitle( imageFile.getName() );
 	}
 	
 	private Bitmap getScaledBitMap(File imageFile, 
 									int targetWidth, 
 									int targetHeight) {
 
-	    // Get the dimensions of the bitmap
+	    // Get the dimensions of the original bitmap
 	    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 	    bmOptions.inJustDecodeBounds = true;
 	    BitmapFactory.decodeFile(imageFile.getAbsolutePath(), bmOptions);
-	    int photoW = bmOptions.outWidth;
-	    int photoH = bmOptions.outHeight;
+	    int photoWidth = bmOptions.outWidth;
+	    int photoHeight = bmOptions.outHeight;
+	    
+	    Log.d(LOG_TAG, "Scaling image from " + imageFile 
+	    				+ " down from original width " 
+	    				+ photoWidth + " and height " + photoHeight);
 
 	    // Determine how much to scale down the image
-	    int scaleFactor = Math.min(photoW/targetWidth, photoH/targetHeight);
+	    int scaleFactor = 
+	    	Math.min(photoWidth/targetWidth, photoHeight/targetHeight);
 
 	    // Decode the image file into a Bitmap sized to fill the View
 	    bmOptions.inJustDecodeBounds = false;

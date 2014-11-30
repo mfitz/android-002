@@ -28,7 +28,7 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	public SelfieListViewAdapter(Context context) {
 		this.selfieList = new ArrayList<SelfieRecord>();
 		layoutInflater = LayoutInflater.from(context);
-		// TODO - make this a background task to free up the UI thread
+		// TODO - make this a background task to free up the UI thread?
 		populateSelfieListFromStorageDir();
 	}
 
@@ -103,6 +103,8 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	
 	private Bitmap makeThumbnail(File imageFile) {
 		
+		// TODO - find a way to derive the scale factor from 
+		// the image view dimensions
 		return ThumbnailUtils.extractThumbnail(
 					BitmapFactory.decodeFile( imageFile.getPath() ), 
 					80, 
