@@ -23,12 +23,12 @@ public class SelfieListViewAdapter extends BaseAdapter {
 
 	private static LayoutInflater layoutInflater;
 	
-	// TODO - populate list by reading the relevant part of the file system
 	private List<SelfieRecord> selfieList;
 
 	public SelfieListViewAdapter(Context context) {
 		this.selfieList = new ArrayList<SelfieRecord>();
 		layoutInflater = LayoutInflater.from(context);
+		// TODO - make this a background task to free up the UI thread
 		populateSelfieListFromStorageDir();
 	}
 

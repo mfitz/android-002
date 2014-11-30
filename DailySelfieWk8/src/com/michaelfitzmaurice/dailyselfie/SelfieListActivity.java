@@ -14,6 +14,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class SelfieListActivity extends ListActivity {
@@ -101,6 +103,15 @@ public class SelfieListActivity extends ListActivity {
 	    }
 	}
 	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		SelfieRecord selfie = (SelfieRecord) listAdapter.getItem(position);
+		Intent detailIntent = new Intent(this, SelfieDetailActivity.class);
+		detailIntent.putExtra( SelfieDetailActivity.IMAGE_FILE_URI, 
+								selfie.getFullImageFile() );
+		startActivity(detailIntent);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
