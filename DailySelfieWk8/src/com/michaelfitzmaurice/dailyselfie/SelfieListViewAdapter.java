@@ -1,5 +1,7 @@
 package com.michaelfitzmaurice.dailyselfie;
 
+import static com.michaelfitzmaurice.dailyselfie.SelfieListActivity.LOG_TAG;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,21 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	public SelfieListViewAdapter(Context context) {
 		this.selfieList = new ArrayList<SelfieRecord>();
 		layoutInflater = LayoutInflater.from(context);
+		populateSelfieListFromStorageDir();
+	}
+
+	private void populateSelfieListFromStorageDir() {
+		
+		// TODO - use file date comparator to sort by mod date
+		File storageDir = SelfieListActivity.STORAGE_DIRECTORY;
+		Log.d(LOG_TAG, "Looking for existing selfies in " + storageDir);
+		File[] files = storageDir.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			File file = files[i];
+			Log.d(LOG_TAG, "Found selfie at " + file);
+			SelfieRecord selfie = new SelfieRecord(makeThumbnail(file), file);
+			selfieList.add(selfie);
+		}
 	}
 
 	@Override
@@ -65,7 +83,7 @@ public class SelfieListViewAdapter extends BaseAdapter {
 		}
 		
 		viewHolder.thumbnail.setImageBitmap( 
-			makeThumbnail(selfie.getFullImageFile(), viewHolder.thumbnail) );
+			makeThumbnail(selfie.getFullImageFile() ) );
 		String selfieDate = 
 			new Date( selfie.getFullImageFile().lastModified() ).toString();
 		viewHolder.creationDate.setText(selfieDate);
@@ -83,7 +101,7 @@ public class SelfieListViewAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 	
-	private Bitmap makeThumbnail(File imageFile, View imageView) {
+	private Bitmap makeThumbnail(File imageFile) {
 		
 		return ThumbnailUtils.extractThumbnail(
 					BitmapFactory.decodeFile( imageFile.getPath() ), 

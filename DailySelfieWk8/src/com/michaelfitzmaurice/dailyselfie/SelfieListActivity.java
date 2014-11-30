@@ -7,9 +7,6 @@ import java.util.Date;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,9 +18,13 @@ import android.widget.Toast;
 
 public class SelfieListActivity extends ListActivity {
 	
-	public static final String LOG_TAG = "DailySelfie";
+	static final File STORAGE_DIRECTORY = getStorageDirectory();
+	static final String LOG_TAG = "DailySelfie";
 	
+	private static final String STORAGE_DIR_NAME = "dailyselfie";
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
+	private static final SimpleDateFormat DATE_FORMATTER = 
+			new SimpleDateFormat("ddMMMyyyy_HHmmss");
 	
 	private SelfieListViewAdapter listAdapter;
 	private Uri latestSelfieUri;
@@ -31,6 +32,16 @@ public class SelfieListActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if (STORAGE_DIRECTORY.exists() == false) {
+			Log.i(LOG_TAG, "Creating new storage directory at " 
+					+ STORAGE_DIRECTORY.getAbsolutePath() );
+			boolean created = STORAGE_DIRECTORY.mkdir();
+			Log.i(LOG_TAG, "Created storage directory:  " + created);
+		} else {
+			Log.d(LOG_TAG, "Storage directory already exists at " 
+					+ STORAGE_DIRECTORY.getAbsolutePath() );
+		}
 		
 		listAdapter = new SelfieListViewAdapter( getApplicationContext() );
 		setListAdapter(listAdapter);
@@ -42,7 +53,7 @@ public class SelfieListActivity extends ListActivity {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 	    	try {
-	    		latestSelfieUri = imageFileUri();
+	    		latestSelfieUri = createImageFile();
 	    		Log.d(LOG_TAG, "Instructing camera to save new image at " + latestSelfieUri);
 	    	} catch (IOException e) {
 	    		Log.e(LOG_TAG, "Unable to create image file", e);
@@ -56,24 +67,24 @@ public class SelfieListActivity extends ListActivity {
 	    }
 	}
 	
-	private Uri imageFileUri() throws IOException {
+	private Uri createImageFile() throws IOException {
 		
-	    String timeStamp = 
-	    	new SimpleDateFormat( "yyyyMMdd_HHmmss").format(new Date() );
+	    String timeStamp = DATE_FORMATTER.format( new Date() );
 	    String imageFileName = "selfie_" + timeStamp + "_";
-	    File storageDir = 
+	    File imageFile = 
+	    		File.createTempFile(imageFileName, 
+	    							".jpg",
+	    							getStorageDirectory() );
+
+	    return Uri.fromFile(imageFile);
+	}
+	
+	static File getStorageDirectory() {
+		
+		File externalStorageDir = 
 	    		Environment.getExternalStoragePublicDirectory(
 	    				Environment.DIRECTORY_PICTURES);
-	    File imageFile = 
-	    		File.createTempFile(
-	        imageFileName,  /* prefix */
-	        ".jpg",         /* suffix */
-	        storageDir      /* directory */
-	    );
-
-	    // Save a file: path for use with ACTION_VIEW intents
-//	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-	    return Uri.fromFile(imageFile);
+		return new File(externalStorageDir, STORAGE_DIR_NAME);
 	}
 	
 	@Override
@@ -82,14 +93,7 @@ public class SelfieListActivity extends ListActivity {
 									Intent data) {
 		
 	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//	        Bundle extras = data.getExtras();
-//	        Bitmap thumbnail = (Bitmap) extras.get("data");
-//	        Log.d(LOG_TAG, "Camera gave us a new thumbnail: " + thumbnail);
-//	        Uri imageFileUri = 
-//	        	(Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT);
-//	        Log.d(LOG_TAG, "Picture should now exist at " + imageFileUri);
 	        File imageFile = new File( latestSelfieUri.getPath() );
-//	        File imageFile = new File()
 	        SelfieRecord newSelfie = 
 	        	new SelfieRecord(null, imageFile);
 	        listAdapter.add(newSelfie);
@@ -97,14 +101,6 @@ public class SelfieListActivity extends ListActivity {
 	    }
 	}
 	
-//	private Bitmap makeThumbnail(File imageFile) {
-//		
-//		return ThumbnailUtils.extractThumbnail(
-//					BitmapFactory.decodeFile( imageFile.getPath() ), 
-//					12, 
-//					12);
-//	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
