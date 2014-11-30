@@ -63,7 +63,7 @@ public class SelfieListActivity extends ListActivity {
 										receiverIntent, 
 										0);
 		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-											0,
+											TWO_MINUTES_IN_MS,
 											TWO_MINUTES_IN_MS,
 											pendingIntent);
 	}
@@ -125,10 +125,16 @@ public class SelfieListActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		SelfieRecord selfie = (SelfieRecord) listAdapter.getItem(position);
-		Intent detailIntent = new Intent(this, SelfieDetailActivity.class);
-		detailIntent.putExtra( SelfieDetailActivity.IMAGE_FILE_URI, 
-								selfie.getFullImageFile() );
-		startActivity(detailIntent);
+//		Intent detailIntent = new Intent(this, SelfieDetailActivity.class);
+//		detailIntent.putExtra( SelfieDetailActivity.IMAGE_FILE_URI, 
+//								selfie.getFullImageFile() );
+//		startActivity(detailIntent);
+		
+		Intent intent = new Intent();
+		intent.setAction(android.content.Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.fromFile( selfie.getFullImageFile() ), 
+							"image/jpg");
+		startActivity(intent);
 	}
 
 	@Override
