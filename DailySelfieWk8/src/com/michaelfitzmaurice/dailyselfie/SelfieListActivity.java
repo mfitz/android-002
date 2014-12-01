@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -52,7 +53,6 @@ public class SelfieListActivity extends ListActivity {
 		listAdapter = new SelfieListViewAdapter( getApplicationContext() );
 		setListAdapter(listAdapter);
 		
-		// TODO set alarm for AlarmNotifier, every 2 minutes, from now
 		AlarmManager alarmManager = 
 			(AlarmManager) getSystemService(ALARM_SERVICE);
 		Intent receiverIntent = 
@@ -62,10 +62,12 @@ public class SelfieListActivity extends ListActivity {
 										0, 
 										receiverIntent, 
 										0);
-		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-											TWO_MINUTES_IN_MS,
-											TWO_MINUTES_IN_MS,
-											pendingIntent);
+		alarmManager.cancel(pendingIntent);
+		alarmManager.setInexactRepeating(
+					AlarmManager.ELAPSED_REALTIME_WAKEUP,
+					SystemClock.elapsedRealtime() + TWO_MINUTES_IN_MS,
+					TWO_MINUTES_IN_MS,
+					pendingIntent);
 	}
 	
 	private void takeSelfie() {
@@ -146,9 +148,7 @@ public class SelfieListActivity extends ListActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		
 		Log.d(LOG_TAG, "Selected menu item " + item);
 		int id = item.getItemId();
 		if (id == R.id.take_selfie) {

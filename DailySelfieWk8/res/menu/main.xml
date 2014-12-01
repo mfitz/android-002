@@ -10,11 +10,13 @@
         android:title="@string/take_selfie"
         android:showAsAction="ifRoom" />
     
+    <!--
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/action_settings"
         android:showAsAction="ifRoom" />
+    -->
 
 </menu>

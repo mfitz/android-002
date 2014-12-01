@@ -28,13 +28,11 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	public SelfieListViewAdapter(Context context) {
 		this.selfieList = new ArrayList<SelfieRecord>();
 		layoutInflater = LayoutInflater.from(context);
-		// TODO - make this a background task to free up the UI thread?
 		populateSelfieListFromStorageDir();
 	}
 
 	private void populateSelfieListFromStorageDir() {
 		
-		// TODO - use file date comparator to sort by mod date
 		File storageDir = SelfieListActivity.STORAGE_DIRECTORY;
 		Log.d(LOG_TAG, "Looking for existing selfies in " + storageDir);
 		File[] files = storageDir.listFiles();
@@ -104,11 +102,11 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	private Bitmap makeThumbnail(File imageFile) {
 		
 		// TODO - find a way to derive the scale factor from 
-		// the image view dimensions
+		// the (as yet unrendered and thus 0 sized) image view dimensions
 		return ThumbnailUtils.extractThumbnail(
 					BitmapFactory.decodeFile( imageFile.getPath() ), 
-					80, 
-					80 );
+					120, 
+					120 );
 	}
 	
 	static class ViewHolder {
