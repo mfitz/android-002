@@ -36,11 +36,14 @@ public class SelfieListViewAdapter extends BaseAdapter {
 		File storageDir = SelfieListActivity.STORAGE_DIRECTORY;
 		Log.d(LOG_TAG, "Looking for existing selfies in " + storageDir);
 		File[] files = storageDir.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			File file = files[i];
-			Log.d(LOG_TAG, "Found selfie at " + file);
-			SelfieRecord selfie = new SelfieRecord(makeThumbnail(file), file);
-			selfieList.add(selfie);
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				File file = files[i];
+				Log.d(LOG_TAG, "Found selfie at " + file);
+				SelfieRecord selfie = 
+					new SelfieRecord(makeThumbnail(file), file);
+				selfieList.add(selfie);
+			}
 		}
 	}
 
