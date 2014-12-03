@@ -151,11 +151,21 @@ public class SelfieListActivity extends ListActivity {
 		
 		Log.d(LOG_TAG, "Selected menu item " + item);
 		int id = item.getItemId();
-		if (id == R.id.take_selfie) {
-			takeSelfie();
-			return true;
+		switch (id) {
+			case (R.id.take_selfie):
+				takeSelfie();
+				return true;
+			case (R.id.action_settings):
+				startActivity( new Intent(this, PreferencesActivity.class) );
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
+//		if (id == R.id.take_selfie) {
+//			takeSelfie();
+//			return true;
+//		}
+//		return super.onOptionsItemSelected(item);
 	}
 
 }
