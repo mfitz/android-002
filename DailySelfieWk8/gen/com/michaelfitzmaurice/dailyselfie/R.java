@@ -1197,10 +1197,9 @@ containing a value of this type.
         public static final int abc_search_view=0x7f030016;
         public static final int abc_simple_decor=0x7f030017;
         public static final int activity_main=0x7f030018;
-        public static final int preferences=0x7f030019;
-        public static final int selfie_detail_view=0x7f03001a;
-        public static final int selfie_record_view=0x7f03001b;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
+        public static final int selfie_detail_view=0x7f030019;
+        public static final int selfie_record_view=0x7f03001a;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001b;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
@@ -1248,11 +1247,12 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
         public static final int action_settings=0x7f0b000e;
         public static final int app_name=0x7f0b000d;
-        public static final int hello_world=0x7f0b0013;
+        public static final int notifications_preferences=0x7f0b0014;
+        public static final int notifications_preferences_summary=0x7f0b0015;
         public static final int selfie_date_description=0x7f0b0011;
         public static final int selfie_thumbnail_description=0x7f0b0010;
         public static final int take_selfie=0x7f0b000f;
-        public static final int title_activity_preferences=0x7f0b0014;
+        public static final int title_activity_preferences=0x7f0b0013;
         public static final int title_activity_selfie_detail=0x7f0b0012;
     }
     public static final class style {

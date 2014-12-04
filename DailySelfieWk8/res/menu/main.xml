@@ -15,13 +15,5 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         android:showAsAction="never" />
-    
-<!--     <item -->
-<!--         android:id="@+id/action_more_info" -->
-<!--         android:orderInCategory="100" -->
-<!--         android:title="@string/more_info" -->
-<!--         app:showAsAction="never"/> -->
-
-<!--         android:icon="@android:drawable/ic_menu_preferences" -->
 
 </menu>

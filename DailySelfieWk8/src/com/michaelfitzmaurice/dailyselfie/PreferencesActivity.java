@@ -13,5 +13,6 @@ public class PreferencesActivity extends Activity {
 			.beginTransaction()
 			.replace (android.R.id.content, new SettingsFragment() )
 			.commit();
+		setTitle(R.string.action_settings);
 	}
 }

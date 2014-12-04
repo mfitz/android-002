@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     
-    
-<!--     <CheckBoxPreference -->
-<!--         android:key="pref_sync" -->
-<!--         android:title="@string/pref_sync" -->
-<!--         android:summary="@string/pref_sync_summ" -->
-<!--         android:defaultValue="true" /> -->
+<!--     <PreferenceCategory -->
+<!--             android:title="@string/action_settings"> -->
+            
+        <SwitchPreference
+	        android:defaultValue="true"
+	        android:key="notificationsXXX_switch"
+	        android:summary="@string/notifications_preferences_summary"
+	        android:title="@string/notifications_preferences" />
+
+<!--     </PreferenceCategory> -->
 
 </PreferenceScreen>

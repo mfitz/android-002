@@ -9,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,6 +40,8 @@ public class SelfieListActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+//		SharedPreferences prefs = getSharedPreferences(name, mode)
 		
 		if (STORAGE_DIRECTORY.exists() == false) {
 			Log.i(LOG_TAG, "Creating new storage directory at " 
