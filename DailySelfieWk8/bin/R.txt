@@ -347,6 +347,7 @@ int string action_settings 0x7f0b000e
 int string app_name 0x7f0b000d
 int string notifications_preferences 0x7f0b0014
 int string notifications_preferences_summary 0x7f0b0015
+int string notifications_switch_key 0x7f0b0016
 int string selfie_date_description 0x7f0b0011
 int string selfie_thumbnail_description 0x7f0b0010
 int string take_selfie 0x7f0b000f

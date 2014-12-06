@@ -11,11 +11,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
 
-public class AlarmNotifier extends BroadcastReceiver {
+public class AlarmReceiver extends BroadcastReceiver {
 	
 	private static final int NOTIFICATION_ID = 1;
 
-	public AlarmNotifier() {
+	public AlarmReceiver() {
 	}
 
 	@Override
@@ -23,7 +23,8 @@ public class AlarmNotifier extends BroadcastReceiver {
 		Log.d(LOG_TAG, "Received a broadcast");
 		Log.d(LOG_TAG, "Intent is " + intent);
 
-		Intent notificationIntent = new Intent(context, SelfieListActivity.class);
+		Intent notificationIntent = 
+			new Intent(context, SelfieListActivity.class);
 		PendingIntent pendingIntent = 
 			PendingIntent.getActivity(context, 
 										0,
@@ -46,8 +47,8 @@ public class AlarmNotifier extends BroadcastReceiver {
 		NotificationManager notificationManager = 
 			(NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify(NOTIFICATION_ID,
-				notificationBuilder.build());
+		notificationManager.notify( NOTIFICATION_ID,
+									notificationBuilder.build() );
 	}
 
 }

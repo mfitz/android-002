@@ -25,30 +25,29 @@ public class SettingsFragment extends PreferenceFragment {
 		addPreferencesFromResource(R.xml.preferences);
 		
 		SwitchPreference notificationSwitch = 
-			(SwitchPreference) findPreference("notificationsXXX_switch");
+			(SwitchPreference)findPreference( 
+					getString(R.string.notifications_switch_key) );
 		notificationSwitch.setOnPreferenceChangeListener(
 			new OnPreferenceChangeListener() {
 			
 				@Override
 				public boolean onPreferenceChange(Preference preference, 
 													Object newValue) {
-					Log.d(LOG_TAG, "All prefs before preference change handler returns: " 
-										+ prefs.getAll() );
+					boolean switchValue = (Boolean)newValue;
 					Log.d(LOG_TAG, "New value for notification switch will be " 
-							+ newValue);
+									+ switchValue);
+					if (switchValue == false) {
+						Log.d(LOG_TAG, "Disabling notifications... ");
+						Alarms.getInstance().cancel();
+					} else {
+						Log.d(LOG_TAG, "Enabling notifications... ");
+						Alarms.getInstance().set();
+					}
 					return true;
 				}
 			}
 		);
 		
-	}
-	
-	private String dumpPrefs(SharedPreferences prefs) {
-		
-		StringBuilder builder = new StringBuilder();
-//		prefs.
-		
-		return builder.toString();
 	}
 }
 

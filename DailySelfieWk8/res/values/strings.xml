@@ -10,5 +10,6 @@
     <string name="title_activity_preferences">Preferences</string>
     <string name="notifications_preferences">Notifications</string>
     <string name="notifications_preferences_summary">Turn selfie reminders on/off</string>
+    <string name="notifications_switch_key">notifications_switch</string>
 
 </resources>

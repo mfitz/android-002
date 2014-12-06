@@ -1249,6 +1249,7 @@ containing a value of this type.
         public static final int app_name=0x7f0b000d;
         public static final int notifications_preferences=0x7f0b0014;
         public static final int notifications_preferences_summary=0x7f0b0015;
+        public static final int notifications_switch_key=0x7f0b0016;
         public static final int selfie_date_description=0x7f0b0011;
         public static final int selfie_thumbnail_description=0x7f0b0010;
         public static final int take_selfie=0x7f0b000f;

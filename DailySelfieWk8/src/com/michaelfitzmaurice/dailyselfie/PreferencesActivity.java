@@ -11,7 +11,7 @@ public class PreferencesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		getFragmentManager()
 			.beginTransaction()
-			.replace (android.R.id.content, new SettingsFragment() )
+			.replace( android.R.id.content, new SettingsFragment() )
 			.commit();
 		setTitle(R.string.action_settings);
 	}

@@ -5,15 +5,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.app.AlarmManager;
 import android.app.ListActivity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -31,17 +29,14 @@ public class SelfieListActivity extends ListActivity {
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final SimpleDateFormat DATE_FORMATTER = 
 			new SimpleDateFormat("ddMMMyyyy_HHmmss");
-	private static final long TWO_MINUTES_IN_MS = 
-			1000 * 60 * 2;
 	
 	private SelfieListViewAdapter listAdapter;
 	private Uri latestSelfieUri;
-
+	private Alarms alarms;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-//		SharedPreferences prefs = getSharedPreferences(name, mode)
 		
 		if (STORAGE_DIRECTORY.exists() == false) {
 			Log.i(LOG_TAG, "Creating new storage directory at " 
@@ -56,21 +51,22 @@ public class SelfieListActivity extends ListActivity {
 		listAdapter = new SelfieListViewAdapter( getApplicationContext() );
 		setListAdapter(listAdapter);
 		
-		AlarmManager alarmManager = 
-			(AlarmManager) getSystemService(ALARM_SERVICE);
-		Intent receiverIntent = 
-			new Intent(SelfieListActivity.this, AlarmNotifier.class);
-		PendingIntent pendingIntent = 
-			PendingIntent.getBroadcast(SelfieListActivity.this, 
-										0, 
-										receiverIntent, 
-										0);
-		alarmManager.cancel(pendingIntent);
-		alarmManager.setInexactRepeating(
-					AlarmManager.ELAPSED_REALTIME_WAKEUP,
-					SystemClock.elapsedRealtime() + TWO_MINUTES_IN_MS,
-					TWO_MINUTES_IN_MS,
-					pendingIntent);
+		SharedPreferences prefs = 
+				PreferenceManager.getDefaultSharedPreferences(this);
+		Log.d(LOG_TAG, "All prefs in SelfieListActivity.onCreate(): " 
+						+ prefs.getAll() );
+		String notificationSwitchKey = 
+			getString(R.string.notifications_switch_key); 
+		
+		Alarms.setContext(this);
+		alarms = Alarms.getInstance();
+		if (prefs.getBoolean(notificationSwitchKey, false) == true) {
+			Log.d(LOG_TAG, "Setting up alarm for reminders...");
+			alarms.set();
+		} else {
+			Log.d(LOG_TAG, "User prefs say no reminders");
+			alarms.cancel();
+		}
 	}
 	
 	private void takeSelfie() {
@@ -80,7 +76,8 @@ public class SelfieListActivity extends ListActivity {
 	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 	    	try {
 	    		latestSelfieUri = createImageFile();
-	    		Log.d(LOG_TAG, "Instructing camera to save new image at " + latestSelfieUri);
+	    		Log.d(LOG_TAG, "Instructing camera to save new image at " 	
+	    						+ latestSelfieUri);
 	    	} catch (IOException e) {
 	    		Log.e(LOG_TAG, "Unable to create image file", e);
 	    		Toast.makeText(getApplicationContext(), 
@@ -88,7 +85,8 @@ public class SelfieListActivity extends ListActivity {
 	    					Toast.LENGTH_SHORT).show();
 	    		return;
 	    	}
-	    	takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, latestSelfieUri);
+	    	takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, 
+	    								latestSelfieUri);
 	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 	    }
 	}
@@ -144,7 +142,6 @@ public class SelfieListActivity extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -164,11 +161,6 @@ public class SelfieListActivity extends ListActivity {
 			default:
 				return super.onOptionsItemSelected(item);
 		}
-//		if (id == R.id.take_selfie) {
-//			takeSelfie();
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
 	}
 
 }
