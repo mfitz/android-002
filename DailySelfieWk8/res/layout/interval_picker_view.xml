@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ipllparent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ipllchild1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        
+        <LinearLayout
+            android:id="@+id/ipllgrandchild1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:padding="5dp">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/notifications_interval_picker_days" />
+            <NumberPicker
+                android:id="@+id/daysNumberPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/ipllgrandchild2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:padding="5dp">
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/notifications_interval_picker_hours" />
+            <NumberPicker
+                android:id="@+id/hoursNumberPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/ipllgrandchild3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" 
+            android:padding="5dp">
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/notifications_interval_picker_minutes" />
+            <NumberPicker
+                android:id="@+id/minutesNumberPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+        
+        <Button
+            android:id="@+id/cancelNotificationIntervalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notifications_interval_cancel_button" />
+
+        <Button
+            android:id="@+id/setNotificationIntervalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notifications_interval_set_button"
+            android:layout_toRightOf="@+id/cancelNotificationIntervalButton" />
+        
+    </RelativeLayout>
+
+</LinearLayout>

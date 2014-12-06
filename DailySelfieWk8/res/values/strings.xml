@@ -11,5 +11,11 @@
     <string name="notifications_preferences">Notifications</string>
     <string name="notifications_preferences_summary">Turn selfie reminders on/off</string>
     <string name="notifications_switch_key">notifications_switch</string>
+    <string name="notifications_interval_picker_title">Set Notification Frequency</string>
+    <string name="notifications_interval_picker_days">Days</string>
+    <string name="notifications_interval_picker_hours">Hours</string>
+    <string name="notifications_interval_picker_minutes">Minutes</string>
+    <string name="notifications_interval_set_button">Set</string>
+    <string name="notifications_interval_cancel_button">Cancel</string>
 
 </resources>

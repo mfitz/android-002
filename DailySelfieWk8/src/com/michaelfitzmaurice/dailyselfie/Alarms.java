@@ -10,19 +10,24 @@ import android.os.SystemClock;
 import android.util.Log;
 
 /**
- * Singleton to provide a wrapper to manage a single alarm
+ * Singleton to manage a single alarm
  * 
  * @author Michael Fitzmaurice, November 2014
  */
 public class Alarms {
 	
-	private static final long TWO_MINUTES_IN_MS = 1000 * 60 * 2;
+	private static final long ONE_MINUTE_IN_MS = 1000 * 60;
+	private static final long ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60;
+	private static final long ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 24;
+	
+	
+	private static final long TWO_MINUTES_IN_MS = ONE_MINUTE_IN_MS * 2;
 	
 	private static AlarmManager alarmManager;
 	private static PendingIntent pendingIntent;
 	private static Alarms instance;
-	private static long delay = TWO_MINUTES_IN_MS;
-	private static long interval = TWO_MINUTES_IN_MS;
+	private static long delayMs = TWO_MINUTES_IN_MS;
+	private static long intervalMs = TWO_MINUTES_IN_MS;
 
 	private Alarms() {}
 	
@@ -54,15 +59,26 @@ public class Alarms {
 	public void set() {
 		
 		Log.d(LOG_TAG, "Setting new notification alarm to start in " 
-						+ delay + "ms and run every " 
-						+ interval + " ms");
+						+ delayMs + "ms and run every " 
+						+ intervalMs + " ms");
 		Log.d(LOG_TAG, "Pending intent for alarm manager is: " 
 										+ pendingIntent);
 		alarmManager.setInexactRepeating(
 					AlarmManager.ELAPSED_REALTIME_WAKEUP,
-					SystemClock.elapsedRealtime() + delay,
-					interval,
+					SystemClock.elapsedRealtime() + delayMs,
+					intervalMs,
 					pendingIntent);
+	}
+	
+	public void set(AlarmTimeInterval interval) {
+		
+		long millisecondsInterval = 
+			(interval.getDays() * ONE_DAY_IN_MS) 
+			+ (interval.getHours() * ONE_HOUR_IN_MS) 
+			+ (interval.getMinutes() * ONE_MINUTE_IN_MS);
+		delayMs = millisecondsInterval;
+		intervalMs  = millisecondsInterval;
+		this.set();
 	}
 	
 	public void cancel() {
