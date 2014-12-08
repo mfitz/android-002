@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 public class SelfieListViewAdapter extends BaseAdapter {
 
-	private static final int DISPLAY_SCALE_FACTOR = 8;
+	private static final int THUMBNAIL_SCALE_FACTOR = 6;
 	
 	private static LayoutInflater layoutInflater;
 	
@@ -48,7 +48,7 @@ public class SelfieListViewAdapter extends BaseAdapter {
 				Log.d(LOG_TAG, "Found selfie at " + file);
 				SelfieRecord selfie = 
 					new SelfieRecord(makeThumbnail(file), file);
-				selfieList.add(selfie);
+				add(selfie);
 			}
 		}
 	}
@@ -112,11 +112,9 @@ public class SelfieListViewAdapter extends BaseAdapter {
 		
 		DisplayMetrics metrics = new DisplayMetrics();
 		display.getMetrics(metrics);
-		int thumbnailHeight = metrics.heightPixels / DISPLAY_SCALE_FACTOR;
-		int thumbnailWidth = metrics.widthPixels / DISPLAY_SCALE_FACTOR;
+		int thumbnailHeight = metrics.heightPixels / THUMBNAIL_SCALE_FACTOR;
+		int thumbnailWidth = metrics.widthPixels / THUMBNAIL_SCALE_FACTOR;
 		
-		// TODO - find a way to derive the scale factor from 
-		// the (as yet unrendered and thus 0 sized) image view dimensions
 		return ThumbnailUtils.extractThumbnail(
 					BitmapFactory.decodeFile( imageFile.getPath() ), 
 					thumbnailWidth, 
