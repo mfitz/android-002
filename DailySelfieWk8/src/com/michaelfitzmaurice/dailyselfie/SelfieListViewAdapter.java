@@ -1,19 +1,8 @@
 package com.michaelfitzmaurice.dailyselfie;
 
-import static com.michaelfitzmaurice.dailyselfie.SelfieListActivity.LOG_TAG;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,34 +12,14 @@ import android.widget.TextView;
 
 public class SelfieListViewAdapter extends BaseAdapter {
 
-	private static final int THUMBNAIL_SCALE_FACTOR = 6;
-	
-	private static LayoutInflater layoutInflater;
+	private LayoutInflater layoutInflater;
 	
 	private List<SelfieRecord> selfieList;
-	private Display display;
-
-	public SelfieListViewAdapter(Context context, Display display) {
-		this.selfieList = new ArrayList<SelfieRecord>();
-		this.display = display;
-		layoutInflater = LayoutInflater.from(context);
-		populateSelfieListFromStorageDir();
-	}
-
-	private void populateSelfieListFromStorageDir() {
-		
-		File storageDir = SelfieListActivity.STORAGE_DIRECTORY;
-		Log.d(LOG_TAG, "Looking for existing selfies in " + storageDir);
-		File[] files = storageDir.listFiles();
-		if (files != null) {
-			for (int i = 0; i < files.length; i++) {
-				File file = files[i];
-				Log.d(LOG_TAG, "Found selfie at " + file);
-				SelfieRecord selfie = 
-					new SelfieRecord(makeThumbnail(file), file);
-				add(selfie);
-			}
-		}
+	
+	public SelfieListViewAdapter(List<SelfieRecord> selfieList, 
+								LayoutInflater inflater) {
+		this.selfieList = selfieList;
+		this.layoutInflater = inflater;
 	}
 
 	@Override
@@ -105,19 +74,6 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	public void remove(SelfieRecord listItem) {
 		selfieList.remove(listItem);
 		notifyDataSetChanged();
-	}
-	
-	private Bitmap makeThumbnail(File imageFile) {
-		
-		DisplayMetrics metrics = new DisplayMetrics();
-		display.getMetrics(metrics);
-		int thumbnailHeight = metrics.heightPixels / THUMBNAIL_SCALE_FACTOR;
-		int thumbnailWidth = metrics.widthPixels / THUMBNAIL_SCALE_FACTOR;
-		
-		return ThumbnailUtils.extractThumbnail(
-					BitmapFactory.decodeFile( imageFile.getPath() ), 
-					thumbnailWidth, 
-					thumbnailHeight);
 	}
 	
 	static class ViewHolder {

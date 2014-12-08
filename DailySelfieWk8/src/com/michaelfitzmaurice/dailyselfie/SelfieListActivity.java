@@ -3,17 +3,24 @@ package com.michaelfitzmaurice.dailyselfie;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +28,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class SelfieListActivity extends ListActivity {
+	
+	private static final int THUMBNAIL_SCALE_FACTOR = 6;
 	
 	static final File STORAGE_DIRECTORY = getStorageDirectory();
 	static final String LOG_TAG = "DailySelfie";
@@ -49,8 +58,8 @@ public class SelfieListActivity extends ListActivity {
 		}
 		
 		listAdapter = 
-			new SelfieListViewAdapter( getApplicationContext(), 
-									getWindowManager().getDefaultDisplay() );
+			new SelfieListViewAdapter( selfieListFromStorageDir(), 
+										getLayoutInflater() );
 		setListAdapter(listAdapter);
 		
 		SharedPreferences prefs = 
@@ -69,6 +78,39 @@ public class SelfieListActivity extends ListActivity {
 			Log.d(LOG_TAG, "User prefs say no reminders");
 			alarms.cancel();
 		}
+	}
+	
+	private List<SelfieRecord> selfieListFromStorageDir() {
+		
+		List<SelfieRecord> selfieList = new ArrayList<SelfieRecord>();
+		File storageDir = SelfieListActivity.STORAGE_DIRECTORY;
+		Log.d(LOG_TAG, "Looking for existing selfies in " + storageDir);
+		File[] files = storageDir.listFiles();
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				File file = files[i];
+				Log.d(LOG_TAG, "Found selfie at " + file);
+				SelfieRecord selfie = 
+					new SelfieRecord(makeThumbnail(file), file);
+				selfieList.add(selfie);
+			}
+		}
+		
+		return selfieList;
+	}
+	
+	private Bitmap makeThumbnail(File imageFile) {
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		DisplayMetrics metrics = new DisplayMetrics();
+		display.getMetrics(metrics);
+		int thumbnailHeight = metrics.heightPixels / THUMBNAIL_SCALE_FACTOR;
+		int thumbnailWidth = metrics.widthPixels / THUMBNAIL_SCALE_FACTOR;
+		
+		return ThumbnailUtils.extractThumbnail(
+					BitmapFactory.decodeFile( imageFile.getPath() ), 
+					thumbnailWidth, 
+					thumbnailHeight);
 	}
 	
 	private void takeSelfie() {
@@ -121,7 +163,7 @@ public class SelfieListActivity extends ListActivity {
 	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 	        File imageFile = new File( latestSelfieUri.getPath() );
 	        SelfieRecord newSelfie = 
-	        	new SelfieRecord(null, imageFile);
+	        	new SelfieRecord(makeThumbnail(imageFile), imageFile);
 	        listAdapter.add(newSelfie);
 	        Log.d(LOG_TAG, "Added new selfie for " + latestSelfieUri);
 	    }
