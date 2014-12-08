@@ -48,7 +48,9 @@ public class SelfieListActivity extends ListActivity {
 					+ STORAGE_DIRECTORY.getAbsolutePath() );
 		}
 		
-		listAdapter = new SelfieListViewAdapter( getApplicationContext() );
+		listAdapter = 
+			new SelfieListViewAdapter( getApplicationContext(), 
+									getWindowManager().getDefaultDisplay() );
 		setListAdapter(listAdapter);
 		
 		SharedPreferences prefs = 

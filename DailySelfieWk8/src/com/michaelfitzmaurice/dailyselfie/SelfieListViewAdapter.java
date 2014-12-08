@@ -11,7 +11,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +23,16 @@ import android.widget.TextView;
 
 public class SelfieListViewAdapter extends BaseAdapter {
 
+	private static final int DISPLAY_SCALE_FACTOR = 8;
+	
 	private static LayoutInflater layoutInflater;
 	
 	private List<SelfieRecord> selfieList;
+	private Display display;
 
-	public SelfieListViewAdapter(Context context) {
+	public SelfieListViewAdapter(Context context, Display display) {
 		this.selfieList = new ArrayList<SelfieRecord>();
+		this.display = display;
 		layoutInflater = LayoutInflater.from(context);
 		populateSelfieListFromStorageDir();
 	}
@@ -104,12 +110,17 @@ public class SelfieListViewAdapter extends BaseAdapter {
 	
 	private Bitmap makeThumbnail(File imageFile) {
 		
+		DisplayMetrics metrics = new DisplayMetrics();
+		display.getMetrics(metrics);
+		int thumbnailHeight = metrics.heightPixels / DISPLAY_SCALE_FACTOR;
+		int thumbnailWidth = metrics.widthPixels / DISPLAY_SCALE_FACTOR;
+		
 		// TODO - find a way to derive the scale factor from 
 		// the (as yet unrendered and thus 0 sized) image view dimensions
 		return ThumbnailUtils.extractThumbnail(
 					BitmapFactory.decodeFile( imageFile.getPath() ), 
-					120, 
-					120 );
+					thumbnailWidth, 
+					thumbnailHeight);
 	}
 	
 	static class ViewHolder {
