@@ -89,8 +89,7 @@ public class SelfieListViewAdapter extends BaseAdapter {
 			viewHolder = (ViewHolder) newView.getTag();
 		}
 		
-		viewHolder.thumbnail.setImageBitmap( 
-			makeThumbnail(selfie.getFullImageFile() ) );
+		viewHolder.thumbnail.setImageBitmap( selfie.getThumbnail() );
 		String selfieDate = 
 			new Date( selfie.getFullImageFile().lastModified() ).toString();
 		viewHolder.creationDate.setText(selfieDate);

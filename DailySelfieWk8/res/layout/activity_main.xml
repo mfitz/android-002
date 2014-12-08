@@ -8,6 +8,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.michaelfitzmaurice.dailyselfie.SelfieListActivity" >
     
+<!--     <ProgressBar -->
+<!--        style="?android:attr/progressBarStyle" -->
+<!--        android:layout_centerInParent="true" -->
+<!--        android:id="@+id/progressbar_loading" -->
+<!--        android:visibility="gone" -->
+<!--        android:layout_width="wrap_content" -->
+<!--        android:layout_height="wrap_content" /> -->
+    
     <ListView android:id="@android:id/list"
 			    android:layout_width="fill_parent"
 			    android:layout_height="fill_parent"/>
