@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 public class SelfieListActivity extends ListActivity {
 	
-	private static final int THUMBNAIL_SCALE_FACTOR = 6;
+	private static final int THUMBNAIL_SCALE_FACTOR = 7;
 	
 	static final File STORAGE_DIRECTORY = getStorageDirectory();
 	static final String LOG_TAG = "DailySelfie";
