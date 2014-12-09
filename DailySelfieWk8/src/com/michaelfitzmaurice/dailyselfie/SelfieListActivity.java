@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -24,6 +25,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -40,6 +42,8 @@ public class SelfieListActivity extends ListActivity {
 			new SimpleDateFormat("ddMMMyyyy_HHmmss");
 	
 	private SelfieListViewAdapter listAdapter;
+	private ListView listView;
+	private LinearLayout progressLayout;
 	private Uri latestSelfieUri;
 	private Alarms alarms;
 	
@@ -57,10 +61,9 @@ public class SelfieListActivity extends ListActivity {
 					+ STORAGE_DIRECTORY.getAbsolutePath() );
 		}
 		
-		listAdapter = 
-			new SelfieListViewAdapter( selfieListFromStorageDir(), 
-										getLayoutInflater() );
-		setListAdapter(listAdapter);
+		setContentView(R.layout.activity_main);
+	    listView = (ListView) getListView();
+	    progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
 		
 		SharedPreferences prefs = 
 				PreferenceManager.getDefaultSharedPreferences(this);
@@ -78,6 +81,8 @@ public class SelfieListActivity extends ListActivity {
 			Log.d(LOG_TAG, "User prefs say no reminders");
 			alarms.cancel();
 		}
+		
+		new ImageLoadTask().execute(null, null, null);
 	}
 	
 	private List<SelfieRecord> selfieListFromStorageDir() {
@@ -147,7 +152,7 @@ public class SelfieListActivity extends ListActivity {
 	    return Uri.fromFile(imageFile);
 	}
 	
-	static File getStorageDirectory() {
+	private static File getStorageDirectory() {
 		
 		File externalStorageDir = 
 	    		Environment.getExternalStoragePublicDirectory(
@@ -205,6 +210,39 @@ public class SelfieListActivity extends ListActivity {
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	private class ImageLoadTask extends AsyncTask<Void, Void, Void> {
+		
+	    @Override
+	    protected void onPreExecute() {
+	        progressLayout.setVisibility(View.VISIBLE);
+	        listView.setVisibility(View.GONE);
+	        super.onPreExecute();
+	    }
+
+		@Override
+        protected Void doInBackground(Void... params) {
+			listAdapter = 
+					new SelfieListViewAdapter( selfieListFromStorageDir(), 
+												getLayoutInflater() );
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					setListAdapter(listAdapter);
+				}
+			};
+			listView.post(runnable);
+			
+			return null;
+        }
+		
+	    @Override
+	    protected void onPostExecute(Void result) {
+	    	progressLayout.setVisibility(View.GONE);
+	        listView.setVisibility(View.VISIBLE);
+	        super.onPostExecute(result);
+	    }
 	}
 
 }
