@@ -110,11 +110,10 @@ public class SelfieListActivity extends ListActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		display.getMetrics(metrics);
 		int thumbnailHeight = metrics.heightPixels / THUMBNAIL_SCALE_FACTOR;
-		int thumbnailWidth = metrics.widthPixels / THUMBNAIL_SCALE_FACTOR;
 		
 		return ThumbnailUtils.extractThumbnail(
 					BitmapFactory.decodeFile( imageFile.getPath() ), 
-					thumbnailWidth, 
+					thumbnailHeight, 
 					thumbnailHeight);
 	}
 	
