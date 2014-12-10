@@ -366,6 +366,7 @@ int string notifications_interval_picker_hours 0x7f0b0019
 int string notifications_interval_picker_minutes 0x7f0b001a
 int string notifications_interval_picker_title 0x7f0b0017
 int string notifications_interval_set_button 0x7f0b001b
+int string notifications_interval_zero_warning 0x7f0b001d
 int string notifications_preferences 0x7f0b0014
 int string notifications_preferences_summary 0x7f0b0015
 int string notifications_switch_key 0x7f0b0016

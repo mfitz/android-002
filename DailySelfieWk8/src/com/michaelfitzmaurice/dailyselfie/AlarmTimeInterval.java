@@ -1,6 +1,9 @@
 package com.michaelfitzmaurice.dailyselfie;
 
+
 public class AlarmTimeInterval {
+	
+	private static final String FIELD_SEPARATOR = ",";
 	
 	private int days;
 	private int hours;
@@ -9,6 +12,20 @@ public class AlarmTimeInterval {
 	public AlarmTimeInterval() {
 	    super();
     }
+	
+	public AlarmTimeInterval(String interval) {
+		
+		String[] fields = interval.split(FIELD_SEPARATOR);
+		if (fields == null || fields.length != 3) {
+			throw new IllegalArgumentException(
+				"'" + interval + 
+				"' is not a valid AlarmTimeInterval representation");
+		}
+		
+		days = Integer.parseInt(fields[0]);
+		hours = Integer.parseInt(fields[1]);
+		minutes = Integer.parseInt(fields[2]);
+	}
 
 	public AlarmTimeInterval(int days, int hours, int minutes) {
 	    super();
@@ -40,11 +57,27 @@ public class AlarmTimeInterval {
 	public void setMinutes(int minutes) {
 		this.minutes = minutes;
 	}
+	
+	public boolean isZero() {
+		return (days == 0) && (hours == 0) && (minutes == 0);
+	}
 
 	@Override
     public String toString() {
 	    return "AlarmTimeInterval [days=" + days + ", hours=" + hours
 	            + ", minutes=" + minutes + "]";
     }
+	
+	public String serialiseToString() {
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(days);
+		sb.append(FIELD_SEPARATOR);
+		sb.append(hours);
+		sb.append(FIELD_SEPARATOR);
+		sb.append(minutes);
+		
+		return sb.toString();
+	}
 	
 }

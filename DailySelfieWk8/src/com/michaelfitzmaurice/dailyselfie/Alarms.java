@@ -76,9 +76,15 @@ public class Alarms {
 			(interval.getDays() * ONE_DAY_IN_MS) 
 			+ (interval.getHours() * ONE_HOUR_IN_MS) 
 			+ (interval.getMinutes() * ONE_MINUTE_IN_MS);
-		delayMs = millisecondsInterval;
-		intervalMs  = millisecondsInterval;
-		this.set();
+		if (millisecondsInterval > 0) {
+			delayMs = millisecondsInterval;
+			intervalMs  = millisecondsInterval;
+			this.set();
+		} else {
+			Log.w(LOG_TAG, 
+				"User attempted to set alarm interval to 0 ms - ignoring...");
+		}
+		
 	}
 	
 	public void cancel() {

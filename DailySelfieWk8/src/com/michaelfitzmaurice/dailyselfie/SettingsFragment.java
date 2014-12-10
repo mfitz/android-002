@@ -14,9 +14,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
-
+	
+	private static final String ALARM_INTERVAL_KEY = "alarmTimeInterval";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -54,13 +57,20 @@ public class SettingsFragment extends PreferenceFragment {
 	}
 	
 	public void setAlarmInterval() {
+		
+		AlarmTimeInterval alarmInterval = null;
+		SharedPreferences prefs = 
+			PreferenceManager.getDefaultSharedPreferences( getActivity() );
+		String alarmIntervalString = prefs.getString(ALARM_INTERVAL_KEY, null);
+		if (alarmIntervalString != null) {
+			alarmInterval = new AlarmTimeInterval(alarmIntervalString);
+		}
 
 		final Dialog d = new Dialog( getActivity() );
 		d.setContentView(R.layout.interval_picker_view);
 		d.setTitle( getString(R.string.notifications_interval_picker_title) );
 		d.setCancelable(false);
 		
-		// TODO set current values of spinners from preferences
 		final NumberPicker dayPicker = 
 			(NumberPicker) d.findViewById(R.id.daysNumberPicker);
 		dayPicker.setMinValue(0);
@@ -73,8 +83,14 @@ public class SettingsFragment extends PreferenceFragment {
 		
 		final NumberPicker minutesPicker = 
 			(NumberPicker) d.findViewById(R.id.minutesNumberPicker);
-		minutesPicker.setMinValue(1);
+		minutesPicker.setMinValue(0);
 		minutesPicker.setMaxValue(59);
+		
+		if (alarmInterval != null) {
+			dayPicker.setValue( alarmInterval.getDays() );
+			hoursPicker.setValue( alarmInterval.getHours() );
+			minutesPicker.setValue( alarmInterval.getMinutes() );
+		}
 		
 		Button cancelButton = 
 			(Button)d.findViewById(R.id.cancelNotificationIntervalButton);
@@ -96,8 +112,22 @@ public class SettingsFragment extends PreferenceFragment {
 				newTimeInterval.setHours( hoursPicker.getValue() );
 				newTimeInterval.setMinutes( minutesPicker.getValue() );
 				Alarms.getInstance().set(newTimeInterval);
-				// TODO save to preferences
-				d.dismiss();				
+				if ( newTimeInterval.isZero() ) {
+					Toast.makeText(getActivity(),
+								R.string.notifications_interval_zero_warning, 
+								Toast.LENGTH_LONG)
+							.show();
+				} else {
+					SharedPreferences prefs = 
+						PreferenceManager.getDefaultSharedPreferences( 
+															getActivity() );
+					prefs
+						.edit()
+						.putString(ALARM_INTERVAL_KEY, 
+									newTimeInterval.serialiseToString() )
+						.apply();
+					d.dismiss();
+				}
 			}
 		});
 		d.show();

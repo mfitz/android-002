@@ -95,6 +95,9 @@ public class SelfieListActivity extends ListActivity {
 			for (int i = 0; i < files.length; i++) {
 				File file = files[i];
 				Log.d(LOG_TAG, "Found selfie at " + file);
+				// TODO - check a disk location to see if the correct sized 
+				// thumbnail already exists. could also use a memory cache
+				// in addition to the disk cache
 				SelfieRecord selfie = 
 					new SelfieRecord(makeThumbnail(file), file);
 				selfieList.add(selfie);
@@ -166,6 +169,8 @@ public class SelfieListActivity extends ListActivity {
 		
 	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 	        File imageFile = new File( latestSelfieUri.getPath() );
+	        // TODO write the thumbnail to a disk (and also mem?) cache 
+	        // to save having to generate it again
 	        SelfieRecord newSelfie = 
 	        	new SelfieRecord(makeThumbnail(imageFile), imageFile);
 	        listAdapter.add(newSelfie);
@@ -204,7 +209,7 @@ public class SelfieListActivity extends ListActivity {
 				takeSelfie();
 				return true;
 			case (R.id.action_settings):
-				startActivity( new Intent(this, PreferencesActivity.class) );
+				startActivity( new Intent(this, SettingsActivity.class) );
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);

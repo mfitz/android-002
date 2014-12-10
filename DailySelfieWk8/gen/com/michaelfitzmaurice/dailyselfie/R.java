@@ -1268,6 +1268,7 @@ containing a value of this type.
         public static final int notifications_interval_picker_minutes=0x7f0b001a;
         public static final int notifications_interval_picker_title=0x7f0b0017;
         public static final int notifications_interval_set_button=0x7f0b001b;
+        public static final int notifications_interval_zero_warning=0x7f0b001d;
         public static final int notifications_preferences=0x7f0b0014;
         public static final int notifications_preferences_summary=0x7f0b0015;
         public static final int notifications_switch_key=0x7f0b0016;

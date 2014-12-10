@@ -3,7 +3,7 @@ package com.michaelfitzmaurice.dailyselfie;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class PreferencesActivity extends Activity {
+public class SettingsActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

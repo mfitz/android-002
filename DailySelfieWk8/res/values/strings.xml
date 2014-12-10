@@ -17,5 +17,6 @@
     <string name="notifications_interval_picker_minutes">Minutes</string>
     <string name="notifications_interval_set_button">Set</string>
     <string name="notifications_interval_cancel_button">Cancel</string>
+    <string name="notifications_interval_zero_warning">Error - notification frequency must be at least 1 minute</string>
 
 </resources>
