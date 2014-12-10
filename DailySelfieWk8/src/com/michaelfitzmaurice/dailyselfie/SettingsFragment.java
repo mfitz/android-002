@@ -1,5 +1,6 @@
 package com.michaelfitzmaurice.dailyselfie;
 
+import static com.michaelfitzmaurice.dailyselfie.Alarms.ALARM_INTERVAL_PREFERENCES_KEY;
 import static com.michaelfitzmaurice.dailyselfie.SelfieListActivity.LOG_TAG;
 import android.app.Dialog;
 import android.content.SharedPreferences;
@@ -18,8 +19,6 @@ import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
 	
-	private static final String ALARM_INTERVAL_KEY = "alarmTimeInterval";
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -27,7 +26,8 @@ public class SettingsFragment extends PreferenceFragment {
 		
 		final SharedPreferences prefs = 
 			PreferenceManager.getDefaultSharedPreferences( getActivity() );
-		Log.d(LOG_TAG, "All prefs in onCreate(): " + prefs.getAll() );
+		Log.d(LOG_TAG, "All prefs in SettingsFragment.onCreate(): " 
+						+ prefs.getAll() );
 		
 		addPreferencesFromResource(R.xml.preferences);
 		
@@ -61,7 +61,8 @@ public class SettingsFragment extends PreferenceFragment {
 		AlarmTimeInterval alarmInterval = null;
 		SharedPreferences prefs = 
 			PreferenceManager.getDefaultSharedPreferences( getActivity() );
-		String alarmIntervalString = prefs.getString(ALARM_INTERVAL_KEY, null);
+		String alarmIntervalString = 
+			prefs.getString(ALARM_INTERVAL_PREFERENCES_KEY, null);
 		if (alarmIntervalString != null) {
 			alarmInterval = new AlarmTimeInterval(alarmIntervalString);
 		}
@@ -106,12 +107,10 @@ public class SettingsFragment extends PreferenceFragment {
 		setButton.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d(LOG_TAG, "Set button clicked!");
 				AlarmTimeInterval newTimeInterval = new AlarmTimeInterval();
 				newTimeInterval.setDays( dayPicker.getValue() );
 				newTimeInterval.setHours( hoursPicker.getValue() );
 				newTimeInterval.setMinutes( minutesPicker.getValue() );
-				Alarms.getInstance().set(newTimeInterval);
 				if ( newTimeInterval.isZero() ) {
 					Toast.makeText(getActivity(),
 								R.string.notifications_interval_zero_warning, 
@@ -123,9 +122,10 @@ public class SettingsFragment extends PreferenceFragment {
 															getActivity() );
 					prefs
 						.edit()
-						.putString(ALARM_INTERVAL_KEY, 
+						.putString(ALARM_INTERVAL_PREFERENCES_KEY, 
 									newTimeInterval.serialiseToString() )
 						.apply();
+					Alarms.getInstance().set(newTimeInterval);
 					d.dismiss();
 				}
 			}
@@ -133,5 +133,3 @@ public class SettingsFragment extends PreferenceFragment {
 		d.show();
 	}
 }
-
-

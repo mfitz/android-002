@@ -15,7 +15,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
-
             <ProgressBar
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"

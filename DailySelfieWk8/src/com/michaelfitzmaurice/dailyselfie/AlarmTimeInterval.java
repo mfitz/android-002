@@ -3,6 +3,10 @@ package com.michaelfitzmaurice.dailyselfie;
 
 public class AlarmTimeInterval {
 	
+	private static final long ONE_MINUTE_IN_MS = 1000 * 60;
+	private static final long ONE_HOUR_IN_MS = ONE_MINUTE_IN_MS * 60;
+	private static final long ONE_DAY_IN_MS = ONE_HOUR_IN_MS * 24;
+	
 	private static final String FIELD_SEPARATOR = ",";
 	
 	private int days;
@@ -22,9 +26,9 @@ public class AlarmTimeInterval {
 				"' is not a valid AlarmTimeInterval representation");
 		}
 		
-		days = Integer.parseInt(fields[0]);
-		hours = Integer.parseInt(fields[1]);
-		minutes = Integer.parseInt(fields[2]);
+		this.days = Integer.parseInt(fields[0]);
+		this.hours = Integer.parseInt(fields[1]);
+		this.minutes = Integer.parseInt(fields[2]);
 	}
 
 	public AlarmTimeInterval(int days, int hours, int minutes) {
@@ -59,7 +63,14 @@ public class AlarmTimeInterval {
 	}
 	
 	public boolean isZero() {
-		return (days == 0) && (hours == 0) && (minutes == 0);
+		return (toMilliseconds() == 0);
+	}
+	
+	public long toMilliseconds() {
+		
+		return ( getDays() * ONE_DAY_IN_MS ) 
+				+ ( getHours() * ONE_HOUR_IN_MS ) 
+				+ ( getMinutes() * ONE_MINUTE_IN_MS );
 	}
 
 	@Override

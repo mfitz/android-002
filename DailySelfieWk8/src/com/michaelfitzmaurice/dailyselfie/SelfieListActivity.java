@@ -45,7 +45,6 @@ public class SelfieListActivity extends ListActivity {
 	private ListView listView;
 	private LinearLayout progressLayout;
 	private Uri latestSelfieUri;
-	private Alarms alarms;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,18 +68,8 @@ public class SelfieListActivity extends ListActivity {
 				PreferenceManager.getDefaultSharedPreferences(this);
 		Log.d(LOG_TAG, "All prefs in SelfieListActivity.onCreate(): " 
 						+ prefs.getAll() );
-		String notificationSwitchKey = 
-			getString(R.string.notifications_switch_key); 
-		
 		Alarms.setContext(this);
-		alarms = Alarms.getInstance();
-		if (prefs.getBoolean(notificationSwitchKey, false) == true) {
-			Log.d(LOG_TAG, "Setting up alarm for reminders...");
-			alarms.set();
-		} else {
-			Log.d(LOG_TAG, "User prefs say no reminders");
-			alarms.cancel();
-		}
+		Alarms.getInstance().setInitialAlarmIfRequired(prefs);
 		
 		new ImageLoadTask().execute(null, null, null);
 	}
@@ -97,7 +86,8 @@ public class SelfieListActivity extends ListActivity {
 				Log.d(LOG_TAG, "Found selfie at " + file);
 				// TODO - check a disk location to see if the correct sized 
 				// thumbnail already exists. could also use a memory cache
-				// in addition to the disk cache
+				// in addition to the disk cache. if cache check misses, 
+				// generate the thumbnail and write to cache(s)
 				SelfieRecord selfie = 
 					new SelfieRecord(makeThumbnail(file), file);
 				selfieList.add(selfie);
@@ -170,7 +160,7 @@ public class SelfieListActivity extends ListActivity {
 	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 	        File imageFile = new File( latestSelfieUri.getPath() );
 	        // TODO write the thumbnail to a disk (and also mem?) cache 
-	        // to save having to generate it again
+	        // to save having to generate it again later
 	        SelfieRecord newSelfie = 
 	        	new SelfieRecord(makeThumbnail(imageFile), imageFile);
 	        listAdapter.add(newSelfie);
@@ -248,5 +238,4 @@ public class SelfieListActivity extends ListActivity {
 	        super.onPostExecute(result);
 	    }
 	}
-
 }
