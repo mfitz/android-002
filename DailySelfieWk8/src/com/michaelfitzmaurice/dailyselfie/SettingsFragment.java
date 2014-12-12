@@ -2,6 +2,7 @@ package com.michaelfitzmaurice.dailyselfie;
 
 import static com.michaelfitzmaurice.dailyselfie.Alarms.ALARM_INTERVAL_PREFERENCES_KEY;
 import static com.michaelfitzmaurice.dailyselfie.SelfieListActivity.LOG_TAG;
+import static java.lang.String.format;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,21 +20,19 @@ import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
 	
+	private SwitchPreference notificationSwitch;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		
-		final SharedPreferences prefs = 
-			PreferenceManager.getDefaultSharedPreferences( getActivity() );
-		Log.d(LOG_TAG, "All prefs in SettingsFragment.onCreate(): " 
-						+ prefs.getAll() );
-		
 		addPreferencesFromResource(R.xml.preferences);
 		
-		SwitchPreference notificationSwitch = 
+		notificationSwitch = 
 			(SwitchPreference)findPreference( 
 					getString(R.string.notifications_switch_key) );
+		setNotificationSwitchSummary();
 		notificationSwitch.setOnPreferenceChangeListener(
 			new OnPreferenceChangeListener() {
 			
@@ -50,23 +49,32 @@ public class SettingsFragment extends PreferenceFragment {
 						Log.d(LOG_TAG, "Enabling notifications... ");
 						setAlarmInterval();
 					}
+					setNotificationSwitchSummary();
+					
 					return true;
 				}
 			}
 		);
 	}
+
+	private void setNotificationSwitchSummary() {
+		
+	    AlarmTimeInterval alarmInterval = getAlarmInterval();
+		if (alarmInterval != null) {
+			String text = 
+				format( getString(R.string.notifications_preferences_on_summary), 
+						alarmInterval.getDays(), 
+						alarmInterval.getHours(),
+						alarmInterval.getMinutes() );
+			notificationSwitch.setSummary(text);
+		} else {
+			notificationSwitch.setSummary( 
+				getString(R.string.notifications_preferences_off_summary) );
+		}
+    }
 	
 	public void setAlarmInterval() {
 		
-		AlarmTimeInterval alarmInterval = null;
-		SharedPreferences prefs = 
-			PreferenceManager.getDefaultSharedPreferences( getActivity() );
-		String alarmIntervalString = 
-			prefs.getString(ALARM_INTERVAL_PREFERENCES_KEY, null);
-		if (alarmIntervalString != null) {
-			alarmInterval = new AlarmTimeInterval(alarmIntervalString);
-		}
-
 		final Dialog d = new Dialog( getActivity() );
 		d.setContentView(R.layout.interval_picker_view);
 		d.setTitle( getString(R.string.notifications_interval_picker_title) );
@@ -87,6 +95,7 @@ public class SettingsFragment extends PreferenceFragment {
 		minutesPicker.setMinValue(0);
 		minutesPicker.setMaxValue(59);
 		
+		AlarmTimeInterval alarmInterval = getAlarmInterval();
 		if (alarmInterval != null) {
 			dayPicker.setValue( alarmInterval.getDays() );
 			hoursPicker.setValue( alarmInterval.getHours() );
@@ -98,6 +107,8 @@ public class SettingsFragment extends PreferenceFragment {
 		cancelButton.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				notificationSwitch.setChecked(false);
+				setNotificationSwitchSummary();
 				d.dismiss();				
 			}
 		});
@@ -126,10 +137,25 @@ public class SettingsFragment extends PreferenceFragment {
 									newTimeInterval.serialiseToString() )
 						.apply();
 					Alarms.getInstance().set(newTimeInterval);
+					setNotificationSwitchSummary();
 					d.dismiss();
 				}
 			}
 		});
 		d.show();
+	}
+	
+	private AlarmTimeInterval getAlarmInterval() {
+		
+		AlarmTimeInterval alarmInterval = null;
+		SharedPreferences prefs = 
+			PreferenceManager.getDefaultSharedPreferences( getActivity() );
+		String alarmIntervalString = 
+			prefs.getString(ALARM_INTERVAL_PREFERENCES_KEY, null);
+		if (alarmIntervalString != null) {
+			alarmInterval = new AlarmTimeInterval(alarmIntervalString);
+		}
+		
+		return alarmInterval;
 	}
 }

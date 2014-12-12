@@ -31,11 +31,10 @@ import android.widget.Toast;
 
 public class SelfieListActivity extends ListActivity {
 	
-	private static final int THUMBNAIL_SCALE_FACTOR = 7;
-	
-	static final File STORAGE_DIRECTORY = getStorageDirectory();
 	static final String LOG_TAG = "DailySelfie";
 	
+	private static final int THUMBNAIL_SCALE_FACTOR = 8;
+	private static final File STORAGE_DIRECTORY = getStorageDirectory();
 	private static final String STORAGE_DIR_NAME = "dailyselfie";
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final SimpleDateFormat DATE_FORMATTER = 
@@ -77,9 +76,8 @@ public class SelfieListActivity extends ListActivity {
 	private List<SelfieRecord> selfieListFromStorageDir() {
 		
 		List<SelfieRecord> selfieList = new ArrayList<SelfieRecord>();
-		File storageDir = SelfieListActivity.STORAGE_DIRECTORY;
-		Log.d(LOG_TAG, "Looking for existing selfies in " + storageDir);
-		File[] files = storageDir.listFiles();
+		Log.d(LOG_TAG, "Looking for existing selfies in " + STORAGE_DIRECTORY);
+		File[] files = STORAGE_DIRECTORY.listFiles();
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
 				File file = files[i];
@@ -139,7 +137,7 @@ public class SelfieListActivity extends ListActivity {
 	    File imageFile = 
 	    		File.createTempFile(imageFileName, 
 	    							".jpg",
-	    							getStorageDirectory() );
+	    							STORAGE_DIRECTORY );
 
 	    return Uri.fromFile(imageFile);
 	}

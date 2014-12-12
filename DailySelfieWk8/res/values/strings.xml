@@ -9,7 +9,6 @@
     <string name="title_activity_selfie_detail">SelfieDetailActivity</string>
     <string name="title_activity_preferences">Preferences</string>
     <string name="notifications_preferences">Notifications</string>
-    <string name="notifications_preferences_summary">Turn selfie reminders on/off</string>
     <string name="notifications_switch_key">notifications_switch</string>
     <string name="notifications_interval_picker_title">Set Notification Frequency</string>
     <string name="notifications_interval_picker_days">Days</string>
@@ -18,5 +17,7 @@
     <string name="notifications_interval_set_button">Set</string>
     <string name="notifications_interval_cancel_button">Cancel</string>
     <string name="notifications_interval_zero_warning">Notification frequency must be at least 1 minute</string>
+    <string name="notifications_preferences_off_summary">Turn selfie reminders on/off</string>
+    <string name="notifications_preferences_on_summary">Frequency: every %1$d days, %2$d hours, %3$d minutes.</string>
 
 </resources>
