@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.michaelfitzmaurice.dailyselfie.settings.SettingsActivity;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,7 +33,7 @@ import android.widget.Toast;
 
 public class SelfieListActivity extends ListActivity {
 	
-	static final String LOG_TAG = "DailySelfie";
+	public static final String LOG_TAG = "DailySelfie";
 	
 	private static final int THUMBNAIL_SCALE_FACTOR = 8;
 	private static final File STORAGE_DIRECTORY = getStorageDirectory();
@@ -192,6 +194,7 @@ public class SelfieListActivity extends ListActivity {
 		
 		Log.d(LOG_TAG, "Selected menu item " + item);
 		int id = item.getItemId();
+		Log.d(LOG_TAG, "Item id: " + id);
 		switch (id) {
 			case (R.id.take_selfie):
 				takeSelfie();

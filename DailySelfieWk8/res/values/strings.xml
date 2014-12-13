@@ -2,22 +2,30 @@
 <resources>
 
     <string name="app_name">DailySelfie</string>
-    <string name="action_settings">Settings</string>
+    
     <string name="take_selfie">Take Selfie</string>
     <string name="selfie_thumbnail_description">Thumbnail of the selfie</string>
     <string name="selfie_date_description">Date the selfie was taken</string>
     <string name="title_activity_selfie_detail">SelfieDetailActivity</string>
     <string name="title_activity_preferences">Preferences</string>
-    <string name="notifications_preferences">Notifications</string>
+    
+    <string name="action_settings">Settings</string>
+    
+    <string name="notifications_preferences">Selfie Reminders</string>
+    <string name="notifications_switch_title">Notifications</string>
+    <string name="notifications_switch_summary">Turn notifications on or off</string>
     <string name="notifications_switch_key">notifications_switch</string>
-    <string name="notifications_interval_picker_title">Set Notification Frequency</string>
+    
+    <string name="notifications_interval_key">notifications_interval</string>
+    <string name="notifications_interval_picker_title">Notification Frequency</string>
     <string name="notifications_interval_picker_days">Days</string>
     <string name="notifications_interval_picker_hours">Hours</string>
     <string name="notifications_interval_picker_minutes">Minutes</string>
     <string name="notifications_interval_set_button">Set</string>
     <string name="notifications_interval_cancel_button">Cancel</string>
-    <string name="notifications_interval_zero_warning">Notification frequency must be at least 1 minute</string>
+    <string name="notifications_interval_zero_warning">Reminder frequency must be at least 1 minute</string>
+    
     <string name="notifications_preferences_off_summary">Turn selfie reminders on/off</string>
-    <string name="notifications_preferences_on_summary">Frequency: every %1$d days, %2$d hours, %3$d minutes.</string>
+    <string name="notifications_preferences_on_summary">Every %1$d days, %2$d hours, %3$d minutes.</string>
 
 </resources>

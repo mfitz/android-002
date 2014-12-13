@@ -34,7 +34,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.michaelfitzmaurice.dailyselfie.settings.SettingsActivity"
             android:label="@string/title_activity_preferences" >
         </activity>
         <receiver android:name=".AlarmReceiver" />

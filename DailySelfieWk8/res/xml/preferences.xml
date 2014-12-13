@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     
-<!--     <PreferenceCategory -->
-<!--             android:title="@string/action_settings"> -->
+    <PreferenceCategory
+            android:title="@string/notifications_preferences">
             
         <SwitchPreference
 	        android:defaultValue="true"
 	        android:key="@string/notifications_switch_key"
 	        android:summary="@string/notifications_preferences_off_summary"
-	        android:title="@string/notifications_preferences" />
+	        android:title="@string/notifications_preferences" /> 
+	        
+         <com.michaelfitzmaurice.dailyselfie.settings.ReminderIntervalDialogPreference 
+             android:title="@string/notifications_interval_picker_title" />
 
-<!--     </PreferenceCategory> -->
+    </PreferenceCategory>
 
 </PreferenceScreen>
