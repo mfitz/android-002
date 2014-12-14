@@ -2,6 +2,7 @@ package com.michaelfitzmaurice.dailyselfie.settings;
 
 import static com.michaelfitzmaurice.dailyselfie.Alarms.ALARM_INTERVAL_PREFERENCES_KEY;
 import static com.michaelfitzmaurice.dailyselfie.SelfieListActivity.LOG_TAG;
+import static java.lang.String.format;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -10,6 +11,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.michaelfitzmaurice.dailyselfie.AlarmTimeInterval;
 import com.michaelfitzmaurice.dailyselfie.Alarms;
@@ -44,9 +46,15 @@ public class SettingsFragment extends PreferenceFragment {
 					if (switchValue == false) {
 						Log.d(LOG_TAG, "Disabling notifications... ");
 						Alarms.getInstance().cancel();
+						showToast(R.string.notifications_switched_off_confirmation);
 					} else {
 						Log.d(LOG_TAG, "Enabling notifications... ");
-						Alarms.getInstance().set( getAlarmInterval() );
+						AlarmTimeInterval interval = getAlarmInterval(); 
+						Alarms.getInstance().set(interval);
+						showToast(R.string.notifications_switched_on_confirmation,
+									interval.getDays(),
+									interval.getHours(),
+									interval.getMinutes() );
 					}
 					
 					return true;
@@ -68,4 +76,17 @@ public class SettingsFragment extends PreferenceFragment {
 		
 		return alarmInterval;
 	}
+	
+	private void showToast(int messageId, Object... formatArgs) {
+    	
+    	String message = getActivity().getString(messageId);
+    	if (formatArgs != null) {
+    		message = format(message, formatArgs);
+    	}
+    	
+    	Toast.makeText(getActivity(),
+						message, 
+						Toast.LENGTH_SHORT)
+				.show();
+    }
 }

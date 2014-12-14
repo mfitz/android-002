@@ -27,5 +27,7 @@
     
     <string name="notifications_preferences_off_summary">Turn selfie reminders on/off</string>
     <string name="notifications_preferences_on_summary">Every %1$d days, %2$d hours, %3$d minutes.</string>
+    <string name="notifications_switched_on_confirmation">Notifications enabled for every %1$d days, %2$d hours, %3$d minutes</string>
+    <string name="notifications_switched_off_confirmation">Notifications switched off</string>
 
 </resources>

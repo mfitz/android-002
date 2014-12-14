@@ -1276,6 +1276,8 @@ containing a value of this type.
         public static final int notifications_switch_key=0x7f0b0017;
         public static final int notifications_switch_summary=0x7f0b0016;
         public static final int notifications_switch_title=0x7f0b0015;
+        public static final int notifications_switched_off_confirmation=0x7f0b0023;
+        public static final int notifications_switched_on_confirmation=0x7f0b0022;
         public static final int selfie_date_description=0x7f0b0010;
         public static final int selfie_thumbnail_description=0x7f0b000f;
         public static final int take_selfie=0x7f0b000e;

@@ -80,10 +80,7 @@ public class ReminderIntervalDialogPreference extends DialogPreference {
     			newTimeInterval.setHours( hoursPicker.getValue() );
     			newTimeInterval.setMinutes( minutesPicker.getValue() );
     			if ( newTimeInterval.isZero() ) {
-    				Toast.makeText(getContext(),
-    						R.string.notifications_interval_zero_warning, 
-    						Toast.LENGTH_LONG)
-    						.show();
+    				showToast(R.string.notifications_interval_zero_warning);
     			} else {
     				SharedPreferences prefs = getSharedPreferences();
     						PreferenceManager.getDefaultSharedPreferences( 
@@ -96,6 +93,11 @@ public class ReminderIntervalDialogPreference extends DialogPreference {
     				setSummary();
     				if ( remindersAreOn() ) {
     					Alarms.getInstance().set(newTimeInterval);
+    					showToast(
+    						R.string.notifications_switched_on_confirmation,
+    						newTimeInterval.getDays(),
+    						newTimeInterval.getHours(),
+    						newTimeInterval.getMinutes() );
     				}
     				getDialog().dismiss();
     			}
@@ -146,6 +148,19 @@ public class ReminderIntervalDialogPreference extends DialogPreference {
     		getContext().getString(R.string.notifications_switch_key);
     	
     	return prefs.getBoolean(reminderSwitchKey, false);
+    }
+    
+    private void showToast(int messageId, Object... formatArgs) {
+    	
+    	String message = getContext().getString(messageId);
+    	if (formatArgs != null) {
+    		message = format(message, formatArgs);
+    	}
+    	
+    	Toast.makeText(getContext(),
+						message, 
+						Toast.LENGTH_SHORT)
+				.show();
     }
 
 }
