@@ -360,6 +360,9 @@ int string abc_shareactionprovider_share_with 0x7f0b000c
 int string abc_shareactionprovider_share_with_application 0x7f0b000b
 int string action_settings 0x7f0b0013
 int string app_name 0x7f0b000d
+int string notification_content_text 0x7f0b0026
+int string notification_content_title 0x7f0b0025
+int string notification_ticker 0x7f0b0024
 int string notifications_interval_cancel_button 0x7f0b001e
 int string notifications_interval_key 0x7f0b0018
 int string notifications_interval_picker_days 0x7f0b001a

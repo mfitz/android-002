@@ -29,5 +29,9 @@
     <string name="notifications_preferences_on_summary">Every %1$d days, %2$d hours, %3$d minutes.</string>
     <string name="notifications_switched_on_confirmation">Notifications enabled for every %1$d days, %2$d hours, %3$d minutes</string>
     <string name="notifications_switched_off_confirmation">Notifications switched off</string>
+    
+    <string name="notification_ticker">Your next selfie is now due</string>
+    <string name="notification_content_title">Daily Selfie due!</string>
+    <string name="notification_content_text">Time for another selfie</string>
 
 </resources>

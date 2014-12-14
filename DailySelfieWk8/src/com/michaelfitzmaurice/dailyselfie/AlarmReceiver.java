@@ -37,10 +37,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 		Notification.Builder notificationBuilder = 
 			new Notification.Builder(context)
-				.setTicker("Your next selfie is now due")
+				.setTicker( context.getString(R.string.notification_ticker) )
 				.setSmallIcon(android.R.drawable.ic_menu_camera)
-				.setAutoCancel(true).setContentTitle("Daily Selfie due!")
-				.setContentText("Time for another selfie")
+				.setAutoCancel(true).setContentTitle( 
+					context.getString(R.string.notification_content_title) )
+				.setContentText( 
+					context.getString(R.string.notification_content_text) )
 				.setContentIntent(pendingIntent)
 				.setSound(soundUri).setVibrate(vibratePattern);
 

@@ -1262,6 +1262,14 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
         public static final int action_settings=0x7f0b0013;
         public static final int app_name=0x7f0b000d;
+        public static final int notification_content_text=0x7f0b0026;
+        public static final int notification_content_title=0x7f0b0025;
+        /**                      .setTicker("Your next selfie is now due") 
+                 .setSmallIcon(android.R.drawable.ic_menu_camera) 
+                 .setAutoCancel(true).setContentTitle("Daily Selfie due!") 
+                 .setContentText("Time for another selfie") 
+         */
+        public static final int notification_ticker=0x7f0b0024;
         public static final int notifications_interval_cancel_button=0x7f0b001e;
         public static final int notifications_interval_key=0x7f0b0018;
         public static final int notifications_interval_picker_days=0x7f0b001a;
