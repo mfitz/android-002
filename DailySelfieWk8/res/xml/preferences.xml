@@ -11,7 +11,8 @@
 	        android:title="@string/notifications_preferences" /> 
 	        
          <com.michaelfitzmaurice.dailyselfie.settings.ReminderIntervalDialogPreference 
-             android:title="@string/notifications_interval_picker_title" />
+             android:title="@string/notifications_interval_picker_title" 
+             android:gravity="center"/>
 
     </PreferenceCategory>
 

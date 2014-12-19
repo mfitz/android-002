@@ -23,8 +23,9 @@
     <string name="notifications_interval_picker_minutes">Minutes</string>
     <string name="notifications_interval_set_button">Set</string>
     <string name="notifications_interval_cancel_button">Cancel</string>
-    <string name="notifications_interval_zero_warning">Reminder frequency must be at least 1 minute</string>
+    <string name="notifications_interval_zero_warning">Notification frequency must be at least 1 minute</string>
     
+    <string name="notifications_next_due">Next notification due: %1$s</string>
     <string name="notifications_preferences_off_summary">Turn selfie reminders on/off</string>
     <string name="notifications_preferences_on_summary">Every %1$d days, %2$d hours, %3$d minutes.</string>
     <string name="notifications_switched_on_confirmation">Notifications enabled for every %1$d days, %2$d hours, %3$d minutes</string>

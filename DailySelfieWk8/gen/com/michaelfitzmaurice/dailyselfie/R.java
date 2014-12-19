@@ -1262,14 +1262,9 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
         public static final int action_settings=0x7f0b0013;
         public static final int app_name=0x7f0b000d;
-        public static final int notification_content_text=0x7f0b0026;
-        public static final int notification_content_title=0x7f0b0025;
-        /**                      .setTicker("Your next selfie is now due") 
-                 .setSmallIcon(android.R.drawable.ic_menu_camera) 
-                 .setAutoCancel(true).setContentTitle("Daily Selfie due!") 
-                 .setContentText("Time for another selfie") 
-         */
-        public static final int notification_ticker=0x7f0b0024;
+        public static final int notification_content_text=0x7f0b0027;
+        public static final int notification_content_title=0x7f0b0026;
+        public static final int notification_ticker=0x7f0b0025;
         public static final int notifications_interval_cancel_button=0x7f0b001e;
         public static final int notifications_interval_key=0x7f0b0018;
         public static final int notifications_interval_picker_days=0x7f0b001a;
@@ -1278,14 +1273,15 @@ containing a value of this type.
         public static final int notifications_interval_picker_title=0x7f0b0019;
         public static final int notifications_interval_set_button=0x7f0b001d;
         public static final int notifications_interval_zero_warning=0x7f0b001f;
+        public static final int notifications_next_due=0x7f0b0020;
         public static final int notifications_preferences=0x7f0b0014;
-        public static final int notifications_preferences_off_summary=0x7f0b0020;
-        public static final int notifications_preferences_on_summary=0x7f0b0021;
+        public static final int notifications_preferences_off_summary=0x7f0b0021;
+        public static final int notifications_preferences_on_summary=0x7f0b0022;
         public static final int notifications_switch_key=0x7f0b0017;
         public static final int notifications_switch_summary=0x7f0b0016;
         public static final int notifications_switch_title=0x7f0b0015;
-        public static final int notifications_switched_off_confirmation=0x7f0b0023;
-        public static final int notifications_switched_on_confirmation=0x7f0b0022;
+        public static final int notifications_switched_off_confirmation=0x7f0b0024;
+        public static final int notifications_switched_on_confirmation=0x7f0b0023;
         public static final int selfie_date_description=0x7f0b0010;
         public static final int selfie_thumbnail_description=0x7f0b000f;
         public static final int take_selfie=0x7f0b000e;

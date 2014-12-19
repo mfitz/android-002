@@ -1,6 +1,9 @@
 package com.michaelfitzmaurice.dailyselfie;
 
 import static com.michaelfitzmaurice.dailyselfie.SelfieListActivity.LOG_TAG;
+
+import java.util.Date;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -18,11 +21,14 @@ public class Alarms {
 	
 	public static final String ALARM_INTERVAL_PREFERENCES_KEY = 
 		"alarmTimeInterval";
+	public static final String NEXT_ALARM_DUE_PREFERENCES_KEY = 
+		"nextAlarmDue";
 	
-	private static final AlarmTimeInterval DEFAULT_ALARM_INTERVAL = 
+	public static final AlarmTimeInterval DEFAULT_ALARM_INTERVAL = 
 		new AlarmTimeInterval(1, 0, 0);
 	
 	private static AlarmManager alarmManager;
+	private static SharedPreferences sharedPrefences;
 	private static PendingIntent pendingIntent;
 	private static Alarms instance;
 
@@ -42,7 +48,8 @@ public class Alarms {
 		}
 	}
 			
-	public static void setContext(Context context) {   
+	public static void setContext(Context context, 
+									SharedPreferences prefences) {   
 		
 		alarmManager = 
 			(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -51,16 +58,17 @@ public class Alarms {
 													0, 
 													receiverIntent, 
 													0);
+		sharedPrefences = prefences;
 	}
 	
-	public void setInitialAlarmIfRequired(SharedPreferences prefs) {
+	public void setInitialAlarmIfRequired() {
 		
-		if (prefs.getString(ALARM_INTERVAL_PREFERENCES_KEY, null) != null) {
+		if (sharedPrefences.getString(ALARM_INTERVAL_PREFERENCES_KEY, null) != null) {
 			Log.d(LOG_TAG, "Alarm is already set - nothing to do");
 		} else {
 			Log.i(LOG_TAG, 
 				"Alarm has never been set - setting initial default alarm");
-			prefs
+			sharedPrefences
 				.edit()
 				.putString(ALARM_INTERVAL_PREFERENCES_KEY, 
 							DEFAULT_ALARM_INTERVAL.serialiseToString() )
@@ -88,6 +96,7 @@ public class Alarms {
 						SystemClock.elapsedRealtime() + delayMs,
 						intervalMs,
 						pendingIntent);
+			setNextAlarmDuePref(interval);
 		}
 	}
 	
@@ -96,5 +105,19 @@ public class Alarms {
 		Log.d(LOG_TAG, "Cancelling all alarms for PendingIntent: " 
 							+ pendingIntent);
 		alarmManager.cancel(pendingIntent);
+	}
+	
+	private void setNextAlarmDuePref(AlarmTimeInterval interval) {
+		
+		long nextAlarmDueMs = 
+			System.currentTimeMillis() + interval.toMilliseconds();
+		Date nextAlarmDueDate = new Date(nextAlarmDueMs);
+		Log.d(LOG_TAG, "Persisting next alarm due time in prefs as " 
+				+ nextAlarmDueDate);
+		sharedPrefences
+			.edit()
+			.putLong(NEXT_ALARM_DUE_PREFERENCES_KEY, 
+						nextAlarmDueMs)
+			.apply();
 	}
 }

@@ -1,6 +1,7 @@
 package com.michaelfitzmaurice.dailyselfie.settings;
 
 import static com.michaelfitzmaurice.dailyselfie.Alarms.ALARM_INTERVAL_PREFERENCES_KEY;
+import static com.michaelfitzmaurice.dailyselfie.SelfieListActivity.LOG_TAG;
 import static java.lang.String.format;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -82,9 +83,9 @@ public class ReminderIntervalDialogPreference extends DialogPreference {
     			if ( newTimeInterval.isZero() ) {
     				showToast(R.string.notifications_interval_zero_warning);
     			} else {
-    				SharedPreferences prefs = getSharedPreferences();
-    						PreferenceManager.getDefaultSharedPreferences( 
-    								getContext() );
+    				SharedPreferences prefs = 
+    					getContext().getSharedPreferences(LOG_TAG, 
+    													Context.MODE_PRIVATE);
     				prefs
 	    				.edit()
 	    				.putString(ALARM_INTERVAL_PREFERENCES_KEY, 
@@ -111,7 +112,7 @@ public class ReminderIntervalDialogPreference extends DialogPreference {
 		
 		AlarmTimeInterval alarmInterval = null;
 		SharedPreferences prefs = 
-			PreferenceManager.getDefaultSharedPreferences( getContext() );
+			getContext().getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
 		String alarmIntervalString = 
 			prefs.getString(ALARM_INTERVAL_PREFERENCES_KEY, 
 											null);

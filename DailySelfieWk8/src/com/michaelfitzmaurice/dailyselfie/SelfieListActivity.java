@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.michaelfitzmaurice.dailyselfie.settings.SettingsActivity;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,6 +27,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.michaelfitzmaurice.dailyselfie.settings.SettingsActivity;
 
 public class SelfieListActivity extends ListActivity {
 	
@@ -66,11 +65,11 @@ public class SelfieListActivity extends ListActivity {
 	    progressLayout = (LinearLayout) findViewById(R.id.progressbar_view);
 		
 		SharedPreferences prefs = 
-				PreferenceManager.getDefaultSharedPreferences(this);
+			this.getSharedPreferences(LOG_TAG, MODE_PRIVATE);
 		Log.d(LOG_TAG, "All prefs in SelfieListActivity.onCreate(): " 
 						+ prefs.getAll() );
-		Alarms.setContext(this);
-		Alarms.getInstance().setInitialAlarmIfRequired(prefs);
+		Alarms.setContext(this, prefs);
+		Alarms.getInstance().setInitialAlarmIfRequired();
 		
 		new ImageLoadTask().execute(null, null, null);
 	}
